@@ -1,0 +1,344 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* OpenDyslexic font for dyslexia mode */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  /* Smooth scrolling with reduced motion support */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html.reduce-motion,
+  html.reduce-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Base body styles */
+  body {
+    @apply bg-cream-100 text-gray-800 font-sans antialiased;
+    @apply dark:bg-gray-900 dark:text-gray-100;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  /* Dyslexia-friendly font */
+  html.dyslexia-font body,
+  html.dyslexia-font h1,
+  html.dyslexia-font h2,
+  html.dyslexia-font h3,
+  html.dyslexia-font h4,
+  html.dyslexia-font h5,
+  html.dyslexia-font h6 {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+  }
+
+  /* Line height variants */
+  html.leading-normal body {
+    line-height: 1.5;
+  }
+
+  html.leading-relaxed body {
+    line-height: 1.75;
+  }
+
+  html.leading-loose body {
+    line-height: 2;
+  }
+
+  /* Letter spacing variants */
+  html.tracking-normal body {
+    letter-spacing: 0;
+  }
+
+  html.tracking-wide body {
+    letter-spacing: 0.025em;
+  }
+
+  html.tracking-wider body {
+    letter-spacing: 0.05em;
+  }
+
+  /* Enhanced focus styles */
+  html.enhanced-focus *:focus {
+    @apply outline-none ring-4 ring-gold-400 ring-offset-2;
+  }
+
+  html.enhanced-focus *:focus:not(:focus-visible) {
+    @apply ring-0 ring-offset-0;
+  }
+
+  html.enhanced-focus *:focus-visible {
+    @apply outline-none ring-4 ring-gold-400 ring-offset-2;
+  }
+
+  /* High contrast mode */
+  html.high-contrast body {
+    @apply bg-white text-black;
+  }
+
+  html.high-contrast.dark body {
+    @apply bg-black text-white;
+  }
+
+  html.high-contrast a {
+    @apply underline decoration-2;
+  }
+
+  html.high-contrast button,
+  html.high-contrast .btn-primary,
+  html.high-contrast .btn-secondary,
+  html.high-contrast .btn-outline {
+    @apply border-2 border-current;
+  }
+
+  /* Skip link */
+  .skip-link {
+    @apply absolute -top-full left-4 z-[100] bg-primary-500 text-white px-4 py-2 rounded-b-lg;
+    @apply focus:top-0 transition-all;
+  }
+
+  /* Selection styles */
+  ::selection {
+    @apply bg-gold-300 text-primary-900;
+  }
+
+  .dark ::selection {
+    @apply bg-gold-600 text-white;
+  }
+}
+
+@layer components {
+  /* Primary Button */
+  .btn-primary {
+    @apply bg-primary-500 text-white px-6 py-3 rounded-lg font-medium;
+    @apply hover:bg-primary-600 transition-all duration-300;
+    @apply shadow-md hover:shadow-lg;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-300;
+    @apply dark:bg-primary-400 dark:hover:bg-primary-300 dark:text-primary-900;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  html:not(.reduce-motion) .btn-primary {
+    @apply transform hover:-translate-y-0.5;
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply bg-gold-500 text-primary-900 px-6 py-3 rounded-lg font-medium;
+    @apply hover:bg-gold-400 transition-all duration-300;
+    @apply shadow-md hover:shadow-lg;
+    @apply focus:outline-none focus:ring-4 focus:ring-gold-300;
+    @apply dark:bg-gold-400 dark:hover:bg-gold-300;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  html:not(.reduce-motion) .btn-secondary {
+    @apply transform hover:-translate-y-0.5;
+  }
+
+  /* Outline Button */
+  .btn-outline {
+    @apply border-2 border-primary-500 text-primary-500 px-6 py-3 rounded-lg font-medium;
+    @apply hover:bg-primary-500 hover:text-white transition-all duration-300;
+    @apply focus:outline-none focus:ring-4 focus:ring-primary-300;
+    @apply dark:border-primary-300 dark:text-primary-300;
+    @apply dark:hover:bg-primary-300 dark:hover:text-primary-900;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Card */
+  .card {
+    @apply bg-white rounded-2xl shadow-lg p-6;
+    @apply hover:shadow-xl transition-shadow duration-300;
+    @apply dark:bg-gray-800 dark:shadow-gray-900/50;
+  }
+
+  /* Section Titles */
+  .section-title {
+    @apply text-3xl md:text-4xl font-serif font-semibold text-primary-500 mb-4;
+    @apply dark:text-primary-300;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-gray-600 max-w-2xl mx-auto;
+    @apply dark:text-gray-400;
+  }
+
+  /* Gradient Overlay */
+  .gradient-overlay {
+    @apply absolute inset-0 bg-gradient-to-b from-primary-500/60 via-primary-500/70 to-primary-500/90;
+  }
+
+  /* Form inputs with better accessibility */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="search"],
+  textarea,
+  select {
+    @apply border-gray-300 rounded-lg;
+    @apply focus:border-primary-500 focus:ring-4 focus:ring-primary-200;
+    @apply dark:bg-gray-800 dark:border-gray-600 dark:text-white;
+    @apply dark:focus:border-primary-400 dark:focus:ring-primary-800;
+  }
+
+  /* High contrast form inputs */
+  html.high-contrast input,
+  html.high-contrast textarea,
+  html.high-contrast select {
+    @apply border-2 border-black dark:border-white;
+  }
+}
+
+@layer utilities {
+  /* Text shadow */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Animations - only when motion is allowed */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  html.reduce-motion .animate-fade-in,
+  html.reduce-motion .animate-slide-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Screen reader only */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .sr-only-focusable:focus {
+    @apply static w-auto h-auto p-2 m-0 overflow-visible whitespace-normal;
+    clip: auto;
+  }
+
+  /* Focus visible utility */
+  .focus-visible-ring {
+    @apply focus:outline-none focus-visible:ring-4 focus-visible:ring-primary-500 focus-visible:ring-offset-2;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Prefers reduced motion - system level override */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast media query support */
+@media (prefers-contrast: more) {
+  body {
+    --tw-bg-opacity: 1;
+    background-color: white;
+    color: black;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Print styles for accessibility */
+@media print {
+  .skip-link,
+  .accessibility-panel,
+  button[aria-label="Otwórz panel dostępności"] {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: black;
+    background: white;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+}
