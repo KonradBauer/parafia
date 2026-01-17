@@ -1,66 +1,66 @@
-import { Church, Calendar, BookOpen, Star, Users, ArrowRight } from 'lucide-react'
+import { Church, BookOpen, Users, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 
 function HistoryPage() {
   const timeline = [
     {
-      year: 'XIV wiek',
-      title: 'Początki parafii',
-      description: 'Pierwsze wzmianki o parafii w Przystajni. Miejscowość była ważnym punktem na szlaku handlowym.',
+      year: '1406',
+      title: 'Pierwsza wzmianka o parafii',
+      description: 'Parafia istniała już w 1406 r. i należała do dekanatu lelowskiego w diecezji krakowskiej.',
     },
     {
-      year: 'XVI wiek',
-      title: 'Budowa drewnianego kościoła',
-      description: 'Wzniesiono pierwszy drewniany kościół pod wezwaniem Trójcy Przenajświętszej, który służył wiernym przez kolejne stulecia.',
+      year: 'XV wiek',
+      title: 'Drewniany kościół',
+      description: 'Jan Długosz w swoim Liber Beneficiorum podał, że kościół był drewniany p.w. Podwyższenia Krzyża, a dziesięciny były przeznaczone dla biskupa krakowskiego.',
     },
     {
-      year: '1800',
-      title: 'Budowa murowanego kościoła',
-      description: 'Rozpoczęto budowę obecnego, murowanego kościoła w stylu klasycystycznym. Budowa trwała kilkanaście lat.',
+      year: 'XVIII wiek',
+      title: 'Okres upadku',
+      description: 'Z powodu bardzo skromnego uposażenia przez 40 lat w pierwszej połowie XVIII w. nie było tutaj proboszcza, a kościół popadł w ruinę.',
     },
     {
-      year: '1850',
-      title: 'Rozbudowa świątyni',
-      description: 'Dobudowano wieżę kościelną oraz zakrystię. Kościół zyskał swój obecny kształt architektoniczny.',
+      year: '1752',
+      title: 'Budowa nowego kościoła',
+      description: 'Z fundacji D. Zabickiej, właścicielki wsi, wybudowano nowy kościół na miejscu zrujnowanej świątyni.',
     },
     {
-      year: '1920',
-      title: 'Odzyskanie niepodległości',
-      description: 'Po odzyskaniu przez Polskę niepodległości, parafia przeżywała okres intensywnego rozwoju duchowego i materialnego.',
+      year: '1797',
+      title: 'Wykończenie kościoła',
+      description: 'Kościół został wykończony kosztem Antoniego Paciorkowskiego.',
     },
     {
-      year: '1945',
-      title: 'Okres powojenny',
-      description: 'Mimo trudności powojennych, parafianie z oddaniem dbali o świątynię i życie duchowe wspólnoty.',
+      year: '1922-1923',
+      title: 'Gruntowna restauracja i konsekracja',
+      description: 'Staraniem ks. Adama Żora kościół został gruntownie odrestaurowany i konsekrowany 29 czerwca 1923 r. przez biskupa sufragana włocławskiego Władysława Krynickiego.',
     },
     {
-      year: '1978',
-      title: 'Pontyfikat Jana Pawła II',
-      description: 'Wybór Karola Wojtyły na papieża przyniósł ożywienie religijne. W parafii organizowano liczne pielgrzymki.',
+      year: '1951-1953',
+      title: 'Odnowienie świątyni',
+      description: 'Staraniem ks. Jana Osmelaka kościół został ponownie odnowiony.',
     },
     {
-      year: '2000',
-      title: 'Wielki Jubileusz',
-      description: 'Obchody Jubileuszu 2000 lat chrześcijaństwa. Przeprowadzono gruntowny remont wnętrza kościoła.',
+      year: '1958',
+      title: 'Restauracja ołtarzy',
+      description: 'Za ks. Józefa Zawadzkiego odrestaurowano ołtarz główny, a za ks. Stanisława Milewskiego odnowiono ołtarze boczne, ufundowano nowe ławki, konfesjonały oraz drogę krzyżową.',
     },
     {
-      year: 'Dziś',
-      title: 'Współczesność',
-      description: 'Parafia kontynuuje swoją misję ewangelizacyjną, dostosowując się do wyzwań współczesnego świata.',
+      year: 'Lata późniejsze',
+      title: 'Dalsze prace remontowe',
+      description: 'Staraniem ks. Jana Bałysa położono posadzkę granitową, prezbiterium wyłożono marmurem i założono witraże w oknach.',
     },
-  ]
-
-  const priests = [
-    { name: 'Ks. Jan Kowalski', years: '2020 - obecnie', role: 'Proboszcz' },
-    { name: 'Ks. Piotr Nowak', years: '2018 - obecnie', role: 'Wikariusz' },
+    {
+      year: 'Współcześnie',
+      title: 'Kontynuacja dzieła',
+      description: 'Staraniem ks. Eugeniusza Lubiszewskiego i dzięki ofiarności wiernych położono dębową boazerię w całym kościele, pomalowano wnętrze, założono napęd mechaniczno-elektryczny dzwonów oraz wybudowano kaplicę na cmentarzu grzebalnym.',
+    },
   ]
 
   return (
     <>
       <PageHeader
         title="Historia Parafii"
-        subtitle="Poznaj bogatą historię naszej wspólnoty sięgającą średniowiecza"
+        subtitle="Poznaj bogatą historię naszej wspólnoty sięgającą 1406 roku"
       />
 
       {/* Introduction */}
@@ -74,12 +74,14 @@ function HistoryPage() {
                   Parafia Trójcy Przenajświętszej
                 </h2>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                  Parafia pw. Trójcy Przenajświętszej w Przystajni to jedna z najstarszych parafii
-                  w regionie. Przez wieki była duchowym centrum dla mieszkańców Przystajni i okolicznych wiosek.
+                  Parafia pw. Trójcy Przenajświętszej w Przystajni istnieje od co najmniej 1406 roku
+                  i należała do dekanatu lelowskiego w diecezji krakowskiej. Przez wieki była duchowym
+                  centrum dla mieszkańców Przystajni i okolicznych wiosek.
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Obecny kościół parafialny, wzniesiony w XIX wieku, jest cennym zabytkiem architektury
-                  sakralnej i świadectwem wiary pokoleń naszych przodków.
+                  Obecny kościół parafialny został wzniesiony w 1752 roku z fundacji D. Zabickiej,
+                  a wykończony w 1797 roku. Konsekrowany 29 czerwca 1923 roku przez biskupa
+                  Władysława Krynickiego, jest świadectwem wiary pokoleń naszych przodków.
                 </p>
               </div>
               <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-800 dark:to-primary-900 rounded-2xl aspect-[4/3] flex items-center justify-center">
@@ -134,33 +136,6 @@ function HistoryPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Current clergy */}
-      <section className="py-12 md:py-16 bg-white dark:bg-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <span className="inline-block text-gold-600 dark:text-gold-400 font-semibold mb-2">Duszpasterze</span>
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-4">
-              Kapłani posługujący w parafii
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {priests.map((priest, idx) => (
-              <article key={idx} className="card text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-800 dark:to-primary-900 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Star size={32} className="text-primary-500 dark:text-primary-400" aria-hidden="true" />
-                </div>
-                <h3 className="text-xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-1">
-                  {priest.name}
-                </h3>
-                <p className="text-gold-600 dark:text-gold-400 font-semibold mb-1">{priest.role}</p>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">{priest.years}</p>
-              </article>
-            ))}
           </div>
         </div>
       </section>

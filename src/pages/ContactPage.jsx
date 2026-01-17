@@ -253,12 +253,18 @@ function ContactPage() {
 
           {/* Map */}
           <div className="max-w-6xl mx-auto mt-12">
-            <div className="bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl h-[400px] flex items-center justify-center">
-              <div className="text-center">
-                <MapPin size={48} className="text-primary-400 mx-auto mb-4" />
-                <p className="text-primary-500 font-medium">Mapa Google</p>
-                <p className="text-primary-400 text-sm">ul. Rynek 21, 42-141 Przystajń</p>
-              </div>
+            <div className="rounded-2xl overflow-hidden shadow-lg">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.8!2d18.9456!3d50.7789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4710d5c5c5c5c5c5%3A0x0!2sRynek%2021%2C%2042-141%20Przystaj%C5%84!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Lokalizacja Parafii Trójcy Przenajświętszej w Przystajni"
+                className="w-full"
+              />
             </div>
           </div>
         </div>

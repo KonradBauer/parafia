@@ -92,13 +92,13 @@ function HeroSection() {
 // Quick Access Cards
 function QuickAccessSection() {
   const cards = [
-    {
-      icon: Clock,
-      title: 'Godziny Mszy',
-      description: 'Sprawdź porządek nabożeństw',
-      link: '#msze',
-      color: 'bg-primary-500',
-    },
+    // {
+    //   icon: Clock,
+    //   title: 'Godziny Mszy',
+    //   description: 'Sprawdź porządek nabożeństw',
+    //   link: '#msze',
+    //   color: 'bg-primary-500',
+    // },
     {
       icon: FileText,
       title: 'Kancelaria',
@@ -123,9 +123,9 @@ function QuickAccessSection() {
   ]
 
   return (
-    <section className="py-16 md:py-20 bg-white">
+    <section className="py-16 md:py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {cards.map((card, index) => (
             <Link
               key={index}
@@ -135,10 +135,10 @@ function QuickAccessSection() {
               <div className={`${card.color} w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
                 <card.icon size={28} className="text-white" />
               </div>
-              <h3 className="text-xl font-serif font-semibold text-primary-500 mb-2">
+              <h3 className="text-xl font-serif font-semibold text-primary-500 dark:text-primary-300 mb-2">
                 {card.title}
               </h3>
-              <p className="text-gray-600 text-sm">{card.description}</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">{card.description}</p>
               <span className="mt-4 text-gold-500 font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                 Zobacz więcej
                 <ArrowRight size={16} />
@@ -175,7 +175,7 @@ function AnnouncementsSection() {
   ]
 
   return (
-    <section className="py-16 md:py-20 bg-cream-100">
+    <section className="py-16 md:py-20 bg-cream-100 dark:bg-gray-800">
       <div className="container mx-auto px-4">
         {/* Section header */}
         <div className="text-center mb-12">
@@ -195,20 +195,20 @@ function AnnouncementsSection() {
             >
               <div className="flex items-center gap-2 mb-3">
                 <Calendar size={16} className="text-gold-500" />
-                <span className="text-sm text-gray-500">{item.date}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{item.date}</span>
                 {item.isNew && (
                   <span className="bg-burgundy-500 text-white text-xs px-2 py-0.5 rounded-full">
                     Nowe
                   </span>
                 )}
               </div>
-              <h3 className="text-xl font-serif font-semibold text-primary-500 mb-3 group-hover:text-gold-600 transition-colors">
+              <h3 className="text-xl font-serif font-semibold text-primary-500 dark:text-primary-300 mb-3 group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
                 {item.title}
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
                 {item.content}
               </p>
-              <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <span className="text-gold-500 font-medium text-sm inline-flex items-center gap-1 group-hover:gap-2 transition-all">
                   Czytaj więcej
                   <ChevronRight size={16} />
@@ -233,7 +233,7 @@ function AnnouncementsSection() {
 // About Section
 function AboutSection() {
   return (
-    <section className="py-16 md:py-24 bg-white overflow-hidden">
+    <section className="py-16 md:py-24 bg-white dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Image placeholder */}
@@ -256,28 +256,28 @@ function AboutSection() {
           <div>
             <span className="inline-block text-gold-500 font-medium mb-2">O nas</span>
             <h2 className="section-title text-left">Nasza Parafia</h2>
-            <p className="text-gray-600 leading-relaxed mb-6">
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
               Parafia pw. Trójcy Przenajświętszej w Przystajni to wspólnota wiernych z bogatą historią sięgającą wielu wieków.
               Nasz kościół jest miejscem modlitwy, spotkania z Bogiem i budowania więzi międzyludzkich.
             </p>
-            <p className="text-gray-600 leading-relaxed mb-8">
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
               Zapraszamy wszystkich do uczestnictwa w życiu parafialnym - w Mszach Świętych,
               nabożeństwach, spotkaniach formacyjnych i wspólnotowych.
             </p>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="text-center p-4 bg-cream-100 rounded-xl">
-                <div className="text-3xl font-serif font-bold text-primary-500">500+</div>
-                <div className="text-sm text-gray-500">lat historii</div>
+              <div className="text-center p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
+                <div className="text-3xl font-serif font-bold text-primary-500 dark:text-primary-300">500+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">lat historii</div>
               </div>
-              <div className="text-center p-4 bg-cream-100 rounded-xl">
-                <div className="text-3xl font-serif font-bold text-gold-500">1000+</div>
-                <div className="text-sm text-gray-500">parafian</div>
+              <div className="text-center p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
+                <div className="text-3xl font-serif font-bold text-gold-500 dark:text-gold-400">1000+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">parafian</div>
               </div>
-              <div className="text-center p-4 bg-cream-100 rounded-xl">
-                <div className="text-3xl font-serif font-bold text-burgundy-500">4</div>
-                <div className="text-sm text-gray-500">Msze dziennie</div>
+              <div className="text-center p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
+                <div className="text-3xl font-serif font-bold text-burgundy-500 dark:text-burgundy-400">4</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">Msze dziennie</div>
               </div>
             </div>
 
@@ -362,7 +362,7 @@ function GalleryPreviewSection() {
   const images = [1, 2, 3, 4, 5, 6]
 
   return (
-    <section className="py-16 md:py-20 bg-cream-100">
+    <section className="py-16 md:py-20 bg-cream-100 dark:bg-gray-800">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <span className="inline-block text-gold-500 font-medium mb-2">Galeria</span>
@@ -405,47 +405,47 @@ function GalleryPreviewSection() {
 // Contact Section
 function ContactSection() {
   return (
-    <section className="py-16 md:py-20 bg-white">
+    <section className="py-16 md:py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact info */}
           <div>
             <span className="inline-block text-gold-500 font-medium mb-2">Kontakt</span>
             <h2 className="section-title text-left">Skontaktuj się z nami</h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-600 dark:text-gray-300 mb-8">
               Zapraszamy do kontaktu z kancelarią parafialną. Chętnie odpowiemy na wszystkie pytania.
             </p>
 
             <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-4 p-4 bg-cream-100 rounded-xl">
+              <div className="flex items-start gap-4 p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
                 <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center flex-shrink-0">
                   <MapPin size={24} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-primary-500">Adres</h3>
-                  <p className="text-gray-600">ul. Rynek 21, 42-141 Przystajń</p>
+                  <h3 className="font-semibold text-primary-500 dark:text-primary-300">Adres</h3>
+                  <p className="text-gray-600 dark:text-gray-300">ul. Rynek 21, 42-141 Przystajń</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 bg-cream-100 rounded-xl">
+              <div className="flex items-start gap-4 p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
                 <div className="w-12 h-12 bg-gold-500 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Phone size={24} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-primary-500">Telefon</h3>
-                  <a href="tel:+48343191029" className="text-gray-600 hover:text-gold-500 transition-colors">
+                  <h3 className="font-semibold text-primary-500 dark:text-primary-300">Telefon</h3>
+                  <a href="tel:+48343191029" className="text-gray-600 dark:text-gray-300 hover:text-gold-500 transition-colors">
                     34 319 10 29
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 p-4 bg-cream-100 rounded-xl">
+              <div className="flex items-start gap-4 p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
                 <div className="w-12 h-12 bg-burgundy-500 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Clock size={24} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-primary-500">Kancelaria czynna</h3>
-                  <p className="text-gray-600">Pon - Pt: 8:00 - 9:00 oraz 16:00 - 17:00</p>
+                  <h3 className="font-semibold text-primary-500 dark:text-primary-300">Kancelaria czynna</h3>
+                  <p className="text-gray-600 dark:text-gray-300">Pon - Pt: 8:00 - 9:00 oraz 16:00 - 17:00</p>
                 </div>
               </div>
             </div>
@@ -457,11 +457,11 @@ function ContactSection() {
           </div>
 
           {/* Map placeholder */}
-          <div className="bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl overflow-hidden min-h-[400px] flex items-center justify-center">
+          <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl overflow-hidden min-h-[400px] flex items-center justify-center">
             <div className="text-center">
-              <MapPin size={48} className="text-primary-300 mx-auto mb-4" />
-              <p className="text-primary-400">Mapa Google Maps</p>
-              <p className="text-primary-300 text-sm">ul. Rynek 21, 42-141 Przystajń</p>
+              <MapPin size={48} className="text-primary-300 dark:text-primary-400 mx-auto mb-4" />
+              <p className="text-primary-400 dark:text-gray-300">Mapa Google Maps</p>
+              <p className="text-primary-300 dark:text-gray-400 text-sm">ul. Rynek 21, 42-141 Przystajń</p>
             </div>
           </div>
         </div>

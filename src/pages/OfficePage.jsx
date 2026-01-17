@@ -7,7 +7,9 @@ import {
   Users,
   Cross,
   BookOpen,
-  AlertCircle
+  AlertCircle,
+  Phone,
+  Star
 } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 
@@ -86,6 +88,56 @@ function OfficePage() {
         title="Kancelaria Parafialna"
         subtitle="Informacje o sakramentach i wymaganych dokumentach"
       />
+
+      {/* Duszpasterze */}
+      <section className="py-12 md:py-16 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-gold-600 dark:text-gold-400 font-semibold mb-2">Duszpasterze</span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary-600 dark:text-primary-300">
+              Kapłani posługujący w parafii
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <article className="bg-cream-100 dark:bg-gray-700 rounded-2xl p-6 text-center shadow-md">
+              <div className="w-24 h-24 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Star size={36} className="text-white" aria-hidden="true" />
+              </div>
+              <h3 className="text-xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-1">
+                ks. Zbigniew Mozol
+              </h3>
+              <p className="text-gold-600 dark:text-gold-400 font-semibold mb-3">Proboszcz</p>
+              <a
+                href="tel:+48603634252"
+                className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+              >
+                <Phone size={18} aria-hidden="true" />
+                +48 603 634 252
+              </a>
+            </article>
+
+            <article className="bg-cream-100 dark:bg-gray-700 rounded-2xl p-6 text-center shadow-md">
+              <img
+                src="/ja.webp"
+                alt="ks. Michał Solarczyk"
+                className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+              />
+              <h3 className="text-xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-1">
+                ks. Michał Solarczyk
+              </h3>
+              <p className="text-gold-600 dark:text-gold-400 font-semibold mb-3">Wikariusz</p>
+              <a
+                href="tel:+48501456865"
+                className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+              >
+                <Phone size={18} aria-hidden="true" />
+                +48 501 456 865
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
 
       <section className="py-12 md:py-16 bg-cream-100 dark:bg-gray-900">
         <div className="container mx-auto px-4">
