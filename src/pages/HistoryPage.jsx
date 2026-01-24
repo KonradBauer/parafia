@@ -1,60 +1,13 @@
-import { Church, BookOpen, Users, ArrowRight } from 'lucide-react'
+import { Church, BookOpen, Users, ArrowRight, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
+import { useHistory, usePriestsFromParish } from '../hooks/useApi'
 
 function HistoryPage() {
-  const timeline = [
-    {
-      year: '1406',
-      title: 'Pierwsza wzmianka o parafii',
-      description: 'Parafia istniała już w 1406 r. i należała do dekanatu lelowskiego w diecezji krakowskiej.',
-    },
-    {
-      year: 'XV wiek',
-      title: 'Drewniany kościół',
-      description: 'Jan Długosz w swoim Liber Beneficiorum podał, że kościół był drewniany p.w. Podwyższenia Krzyża, a dziesięciny były przeznaczone dla biskupa krakowskiego.',
-    },
-    {
-      year: 'XVIII wiek',
-      title: 'Okres upadku',
-      description: 'Z powodu bardzo skromnego uposażenia przez 40 lat w pierwszej połowie XVIII w. nie było tutaj proboszcza, a kościół popadł w ruinę.',
-    },
-    {
-      year: '1752',
-      title: 'Budowa nowego kościoła',
-      description: 'Z fundacji D. Zabickiej, właścicielki wsi, wybudowano nowy kościół na miejscu zrujnowanej świątyni.',
-    },
-    {
-      year: '1797',
-      title: 'Wykończenie kościoła',
-      description: 'Kościół został wykończony kosztem Antoniego Paciorkowskiego.',
-    },
-    {
-      year: '1922-1923',
-      title: 'Gruntowna restauracja i konsekracja',
-      description: 'Staraniem ks. Adama Żora kościół został gruntownie odrestaurowany i konsekrowany 29 czerwca 1923 r. przez biskupa sufragana włocławskiego Władysława Krynickiego.',
-    },
-    {
-      year: '1951-1953',
-      title: 'Odnowienie świątyni',
-      description: 'Staraniem ks. Jana Osmelaka kościół został ponownie odnowiony.',
-    },
-    {
-      year: '1958',
-      title: 'Restauracja ołtarzy',
-      description: 'Za ks. Józefa Zawadzkiego odrestaurowano ołtarz główny, a za ks. Stanisława Milewskiego odnowiono ołtarze boczne, ufundowano nowe ławki, konfesjonały oraz drogę krzyżową.',
-    },
-    {
-      year: 'Lata późniejsze',
-      title: 'Dalsze prace remontowe',
-      description: 'Staraniem ks. Jana Bałysa położono posadzkę granitową, prezbiterium wyłożono marmurem i założono witraże w oknach.',
-    },
-    {
-      year: 'Współcześnie',
-      title: 'Kontynuacja dzieła',
-      description: 'Staraniem ks. Eugeniusza Lubiszewskiego i dzięki ofiarności wiernych położono dębową boazerię w całym kościele, pomalowano wnętrze, założono napęd mechaniczno-elektryczny dzwonów oraz wybudowano kaplicę na cmentarzu grzebalnym.',
-    },
-  ]
+  const { data: historyItems, loading } = useHistory()
+  const { data: priestsFromParish } = usePriestsFromParish()
+
+  const getMediaUrl = (url) => url
 
   return (
     <>
@@ -102,41 +55,55 @@ function HistoryPage() {
             </h2>
           </div>
 
-          <div className="max-w-3xl mx-auto">
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary-300 dark:bg-primary-700 transform md:-translate-x-1/2" aria-hidden="true" />
-
-              {/* Timeline items */}
-              {timeline.map((item, idx) => (
-                <div
-                  key={idx}
-                  className={`relative flex items-start gap-6 mb-8 ${
-                    idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
-                >
-                  {/* Dot */}
-                  <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-gold-500 rounded-full transform -translate-x-1/2 mt-6 z-10 ring-4 ring-cream-100 dark:ring-gray-900" aria-hidden="true" />
-
-                  {/* Content */}
-                  <div className={`ml-12 md:ml-0 md:w-1/2 ${idx % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
-                    <article className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
-                      <span className="inline-block bg-primary-600 dark:bg-primary-500 text-white text-sm px-3 py-1 rounded-full mb-2 font-medium">
-                        {item.year}
-                      </span>
-                      <h3 className="text-xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-700 dark:text-gray-300 text-sm">{item.description}</p>
-                    </article>
-                  </div>
-
-                  {/* Spacer for alternating layout */}
-                  <div className="hidden md:block md:w-1/2" />
-                </div>
-              ))}
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 size={48} className="text-primary-500 animate-spin" />
             </div>
-          </div>
+          ) : historyItems && historyItems.length > 0 ? (
+            <div className="max-w-3xl mx-auto">
+              <div className="relative">
+                <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-primary-300 dark:bg-primary-700 transform md:-translate-x-1/2" aria-hidden="true" />
+
+                {historyItems.map((item, idx) => (
+                  <div
+                    key={item.id}
+                    className={`relative flex items-start gap-6 mb-8 ${
+                      idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                    }`}
+                  >
+                    <div className="absolute left-4 md:left-1/2 w-4 h-4 bg-gold-500 rounded-full transform -translate-x-1/2 mt-6 z-10 ring-4 ring-cream-100 dark:ring-gray-900" aria-hidden="true" />
+
+                    <div className={`ml-12 md:ml-0 md:w-1/2 ${idx % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
+                      <article className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md">
+                        <span className="inline-block bg-primary-600 dark:bg-primary-500 text-white text-sm px-3 py-1 rounded-full mb-2 font-medium">
+                          {item.year}
+                        </span>
+                        <h3 className="text-xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-700 dark:text-gray-300 text-sm">
+                          {typeof item.content === 'string'
+                            ? item.content
+                            : item.content?.[0]?.children?.[0]?.text || ''}
+                        </p>
+                        {item.image && getMediaUrl(item.image) && (
+                          <img
+                            src={getMediaUrl(item.image)}
+                            alt={item.title}
+                            className="mt-4 rounded-lg w-full object-cover max-h-48"
+                          />
+                        )}
+                      </article>
+                    </div>
+
+                    <div className="hidden md:block md:w-1/2" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="text-center text-gray-500">Brak danych historycznych</p>
+          )}
         </div>
       </section>
 
@@ -158,7 +125,9 @@ function HistoryPage() {
                   </h2>
                   <p className="text-gray-700 dark:text-gray-300">
                     Poznaj kapłanów, którzy wyrośli z naszej wspólnoty parafialnej i odpowiedzieli na Boże powołanie.
-                    Z parafii Przystajń pochodzi <strong>11 księży</strong>.
+                    {priestsFromParish && priestsFromParish.length > 0 && (
+                      <> Z parafii Przystajń pochodzi <strong>{priestsFromParish.length} księży</strong>.</>
+                    )}
                   </p>
                 </div>
                 <div className="flex-shrink-0">
