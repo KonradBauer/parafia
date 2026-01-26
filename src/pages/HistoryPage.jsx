@@ -1,13 +1,22 @@
 import { Church, BookOpen, Users, ArrowRight, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
-import { useHistory, usePriestsFromParish } from '../hooks/useApi'
+import { useHistory, usePriestsFromParish, useHistoryAbout } from '../hooks/useApi'
+import { getImageUrl } from '../services/api'
 
 function HistoryPage() {
   const { data: historyItems, loading } = useHistory()
   const { data: priestsFromParish } = usePriestsFromParish()
+  const { data: historyAbout } = useHistoryAbout()
 
-  const getMediaUrl = (url) => url
+  // Defaults for about section
+  const aboutSubtitle = historyAbout?.subtitle || 'O parafii'
+  const aboutTitle = historyAbout?.title || 'Parafia Trójcy Przenajświętszej'
+  const aboutContent = historyAbout?.content || 'Parafia pw. Trójcy Przenajświętszej w Przystajni istnieje od co najmniej 1406 roku i należała do dekanatu lelowskiego w diecezji krakowskiej. Przez wieki była duchowym centrum dla mieszkańców Przystajni i okolicznych wiosek.\n\nObecny kościół parafialny został wzniesiony w 1752 roku z fundacji D. Zabickiej, a wykończony w 1797 roku. Konsekrowany 29 czerwca 1923 roku przez biskupa Władysława Krynickiego, jest świadectwem wiary pokoleń naszych przodków.'
+  const aboutImageUrl = historyAbout?.imageUrl ? getImageUrl(historyAbout.imageUrl) : null
+
+  // Split content into paragraphs
+  const aboutParagraphs = aboutContent.split('\n').filter(p => p.trim())
 
   return (
     <>
@@ -22,23 +31,26 @@ function HistoryPage() {
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
-                <span className="inline-block text-gold-600 dark:text-gold-400 font-semibold mb-2">O parafii</span>
+                <span className="inline-block text-gold-600 dark:text-gold-400 font-semibold mb-2">{aboutSubtitle}</span>
                 <h2 className="text-3xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-4">
-                  Parafia Trójcy Przenajświętszej
+                  {aboutTitle}
                 </h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                  Parafia pw. Trójcy Przenajświętszej w Przystajni istnieje od co najmniej 1406 roku
-                  i należała do dekanatu lelowskiego w diecezji krakowskiej. Przez wieki była duchowym
-                  centrum dla mieszkańców Przystajni i okolicznych wiosek.
-                </p>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Obecny kościół parafialny został wzniesiony w 1752 roku z fundacji D. Zabickiej,
-                  a wykończony w 1797 roku. Konsekrowany 29 czerwca 1923 roku przez biskupa
-                  Władysława Krynickiego, jest świadectwem wiary pokoleń naszych przodków.
-                </p>
+                {aboutParagraphs.map((paragraph, index) => (
+                  <p key={index} className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    {paragraph}
+                  </p>
+                ))}
               </div>
-              <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-800 dark:to-primary-900 rounded-2xl aspect-[4/3] flex items-center justify-center">
-                <Church size={80} className="text-primary-400 dark:text-primary-500" aria-hidden="true" />
+              <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-800 dark:to-primary-900 rounded-2xl aspect-[4/3] flex items-center justify-center overflow-hidden">
+                {aboutImageUrl ? (
+                  <img
+                    src={aboutImageUrl}
+                    alt={aboutTitle}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Church size={80} className="text-primary-400 dark:text-primary-500" aria-hidden="true" />
+                )}
               </div>
             </div>
           </div>
@@ -86,9 +98,9 @@ function HistoryPage() {
                             ? item.content
                             : item.content?.[0]?.children?.[0]?.text || ''}
                         </p>
-                        {item.image && getMediaUrl(item.image) && (
+                        {item.imageUrl && getImageUrl(item.imageUrl) && (
                           <img
-                            src={getMediaUrl(item.image)}
+                            src={getImageUrl(item.imageUrl)}
                             alt={item.title}
                             className="mt-4 rounded-lg w-full object-cover max-h-48"
                           />
