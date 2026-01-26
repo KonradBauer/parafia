@@ -1,0 +1,73 @@
+# Apache Virtual Host Configuration for Parish Website
+# Copy this to your Apache sites-available and adjust paths
+
+<VirtualHost *:80>
+    ServerName parafia-przystajn.pl
+    ServerAlias www.parafia-przystajn.pl
+
+    DocumentRoot /var/www/parafia/frontend/dist
+
+    # Frontend (React app)
+    <Directory /var/www/parafia/frontend/dist>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+
+        # React Router - redirect all requests to index.html
+        RewriteEngine On
+        RewriteBase /
+        RewriteRule ^index\.html$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteCond %{REQUEST_URI} !^/api
+        RewriteCond %{REQUEST_URI} !^/admin
+        RewriteCond %{REQUEST_URI} !^/uploads
+        RewriteRule . /index.html [L]
+    </Directory>
+
+    # Admin Panel
+    Alias /admin /var/www/parafia/admin/dist
+    <Directory /var/www/parafia/admin/dist>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+
+        RewriteEngine On
+        RewriteBase /admin/
+        RewriteRule ^index\.html$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule . /admin/index.html [L]
+    </Directory>
+
+    # Uploads - serve static files from backend
+    Alias /uploads /var/www/parafia/backend/uploads
+    <Directory /var/www/parafia/backend/uploads>
+        Options -Indexes
+        AllowOverride None
+        Require all granted
+
+        # Cache images for 1 week
+        <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+            Header set Cache-Control "max-age=604800, public"
+        </FilesMatch>
+    </Directory>
+
+    # API Proxy to Node.js backend
+    ProxyPreserveHost On
+    ProxyPass /api http://127.0.0.1:3001/api
+    ProxyPassReverse /api http://127.0.0.1:3001/api
+
+    # Security headers
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Logs
+    ErrorLog ${APACHE_LOG_DIR}/parafia-error.log
+    CustomLog ${APACHE_LOG_DIR}/parafia-access.log combined
+</VirtualHost>
+
+# Enable required Apache modules:
+# sudo a2enmod rewrite proxy proxy_http headers
+# sudo systemctl restart apache2

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import api from '@/services/api'
 import { useToast } from '@/hooks/useToast'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import {
   Dialog,
   DialogContent,
@@ -14,6 +15,7 @@ import DataTable from '@/components/DataTable'
 import LoadingState from '@/components/LoadingState'
 import DeleteConfirm from '@/components/DeleteConfirm'
 import FormField from '@/components/FormField'
+import FileUpload from '@/components/FileUpload'
 import { History as HistoryIcon, Loader2 } from 'lucide-react'
 
 const initialForm = {
@@ -21,7 +23,6 @@ const initialForm = {
   title: '',
   content: '',
   imageUrl: '',
-  sortOrder: 0,
 }
 
 function History() {
@@ -54,6 +55,10 @@ function History() {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
+  const handleImageChange = (url) => {
+    setForm((prev) => ({ ...prev, imageUrl: url }))
+  }
+
   const openAdd = () => {
     setSelected(null)
     setForm(initialForm)
@@ -67,7 +72,6 @@ function History() {
       title: item.title || '',
       content: item.content || '',
       imageUrl: item.imageUrl || '',
-      sortOrder: item.sortOrder || 0,
     })
     setDialogOpen(true)
   }
@@ -83,7 +87,6 @@ function History() {
       const payload = {
         ...form,
         year: parseInt(form.year) || 0,
-        sortOrder: parseInt(form.sortOrder) || 0,
       }
       if (selected) {
         await api.updateHistoryItem(selected.id, payload)
@@ -136,11 +139,6 @@ function History() {
         </span>
       ),
     },
-    {
-      key: 'sortOrder',
-      label: 'Kolejność',
-      className: 'w-[100px]',
-    },
   ]
 
   if (loading) return <LoadingState rows={5} />
@@ -170,25 +168,15 @@ function History() {
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                label="Rok"
-                name="year"
-                type="number"
-                value={form.year}
-                onChange={handleChange}
-                placeholder="np. 1920"
-                required
-              />
-              <FormField
-                label="Kolejność"
-                name="sortOrder"
-                type="number"
-                value={form.sortOrder}
-                onChange={handleChange}
-                placeholder="0"
-              />
-            </div>
+            <FormField
+              label="Rok"
+              name="year"
+              type="number"
+              value={form.year}
+              onChange={handleChange}
+              placeholder="np. 1920"
+              required
+            />
 
             <FormField
               label="Tytuł"
@@ -210,14 +198,13 @@ function History() {
               required
             />
 
-            <FormField
-              label="URL zdjęcia"
-              name="imageUrl"
-              type="url"
-              value={form.imageUrl}
-              onChange={handleChange}
-              placeholder="https://..."
-            />
+            <div className="space-y-2">
+              <Label>Zdjęcie (opcjonalnie)</Label>
+              <FileUpload
+                value={form.imageUrl}
+                onChange={handleImageChange}
+              />
+            </div>
           </div>
 
           <DialogFooter>

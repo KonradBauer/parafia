@@ -1,4 +1,7 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const db = require('./db');
 const { login, verifyToken } = require('./auth');
 const { sanitizeMiddleware } = require('./middleware/sanitize');
@@ -6,8 +9,76 @@ const { validate, schemas, rules } = require('./utils/validators');
 
 const router = express.Router();
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Multer configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadsDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, uniqueSuffix + ext);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Niedozwolony typ pliku. Dozwolone: JPG, PNG, GIF, WebP'), false);
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB
+  }
+});
+
 // Apply sanitization to all routes
 router.use(sanitizeMiddleware);
+
+// ============ UPLOAD ============
+router.post('/upload', verifyToken, upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'Nie przesłano pliku' });
+  }
+
+  const fileUrl = `/uploads/${req.file.filename}`;
+  res.json({
+    url: fileUrl,
+    filename: req.file.filename,
+    originalName: req.file.originalname,
+    size: req.file.size
+  });
+});
+
+// Delete uploaded file
+router.delete('/upload/:filename', verifyToken, (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(uploadsDir, filename);
+
+  // Security: prevent path traversal
+  if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+    return res.status(400).json({ error: 'Nieprawidłowa nazwa pliku' });
+  }
+
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Plik nie istnieje' });
+  }
+});
 
 // ============ AUTH ============
 router.post('/auth/login', schemas.login, validate, (req, res) => {
@@ -47,7 +118,7 @@ router.post('/announcements', verifyToken, schemas.announcement, validate, (req,
 router.put('/announcements/:id', verifyToken, [rules.id, ...schemas.announcement], validate, (req, res) => {
   const { title, date, week, content, isNew } = req.body;
   db.prepare(
-    'UPDATE announcements SET title = ?, date = ?, week = ?, content = ?, isNew = ?, updatedAt = datetime("now") WHERE id = ?'
+    "UPDATE announcements SET title = ?, date = ?, week = ?, content = ?, isNew = ?, updatedAt = datetime('now') WHERE id = ?"
   ).run(title, date, week || null, content || null, isNew ? 1 : 0, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
@@ -57,92 +128,126 @@ router.delete('/announcements/:id', verifyToken, [rules.id], validate, (req, res
   res.json({ success: true });
 });
 
-// ============ INTENTIONS ============
+// ============ INTENTIONS (MONTHLY) ============
+const MONTH_NAMES_PL = [
+  '', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+  'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'
+];
+
 router.get('/intentions', (req, res) => {
-  const weeks = db.prepare('SELECT * FROM intention_weeks ORDER BY startDate DESC').all();
+  const months = db.prepare('SELECT * FROM intention_months ORDER BY year DESC, month DESC').all();
   const intentions = db.prepare('SELECT * FROM intentions ORDER BY date, time').all();
 
-  const result = weeks.map(week => ({
-    ...week,
-    intentions: intentions.filter(i => i.weekId === week.id)
+  const result = months.map(m => ({
+    ...m,
+    monthName: `${MONTH_NAMES_PL[m.month]} ${m.year}`,
+    intentions: intentions.filter(i => i.monthId === m.id)
   }));
   res.json(result);
 });
 
 router.get('/intentions/:id', [rules.id], validate, (req, res) => {
-  const week = db.prepare('SELECT * FROM intention_weeks WHERE id = ?').get(req.params.id);
-  if (!week) return res.status(404).json({ error: 'Nie znaleziono' });
+  const month = db.prepare('SELECT * FROM intention_months WHERE id = ?').get(req.params.id);
+  if (!month) return res.status(404).json({ error: 'Nie znaleziono' });
 
-  const intentions = db.prepare('SELECT * FROM intentions WHERE weekId = ? ORDER BY date, time').all(req.params.id);
-  res.json({ ...week, intentions });
+  const intentions = db.prepare('SELECT * FROM intentions WHERE monthId = ? ORDER BY date, time').all(req.params.id);
+  res.json({
+    ...month,
+    monthName: `${MONTH_NAMES_PL[month.month]} ${month.year}`,
+    intentions
+  });
 });
 
-router.post('/intentions', verifyToken, schemas.intentionWeek, validate, (req, res) => {
-  const { startDate, endDate, intentions } = req.body;
+router.post('/intentions', verifyToken, schemas.intentionMonth, validate, (req, res) => {
+  const { year, month, intentions } = req.body;
 
-  const weekResult = db.prepare(
-    'INSERT INTO intention_weeks (startDate, endDate) VALUES (?, ?)'
-  ).run(startDate, endDate);
-  const weekId = weekResult.lastInsertRowid;
+  // Check if month already exists
+  const existing = db.prepare('SELECT id FROM intention_months WHERE year = ? AND month = ?').get(year, month);
+  if (existing) {
+    return res.status(400).json({ error: 'Miesiąc już istnieje' });
+  }
+
+  const monthResult = db.prepare(
+    'INSERT INTO intention_months (year, month) VALUES (?, ?)'
+  ).run(year, month);
+  const monthId = monthResult.lastInsertRowid;
 
   if (intentions && intentions.length > 0) {
     const insertIntention = db.prepare(
-      'INSERT INTO intentions (weekId, date, time, intention) VALUES (?, ?, ?, ?)'
+      'INSERT INTO intentions (monthId, date, time, intention) VALUES (?, ?, ?, ?)'
     );
     intentions.forEach(i => {
-      insertIntention.run(weekId, i.date, i.time, i.intention);
+      insertIntention.run(monthId, i.date, i.time, i.intention);
     });
   }
 
-  res.json({ id: weekId, startDate, endDate, intentions: intentions || [] });
+  res.json({
+    id: monthId,
+    year,
+    month,
+    monthName: `${MONTH_NAMES_PL[month]} ${year}`,
+    intentions: intentions || []
+  });
 });
 
-router.put('/intentions/:id', verifyToken, [rules.id, ...schemas.intentionWeek], validate, (req, res) => {
-  const { startDate, endDate, intentions } = req.body;
+router.put('/intentions/:id', verifyToken, [rules.id, ...schemas.intentionMonth], validate, (req, res) => {
+  const { year, month, intentions } = req.body;
 
-  db.prepare('UPDATE intention_weeks SET startDate = ?, endDate = ?, updatedAt = datetime("now") WHERE id = ?')
-    .run(startDate, endDate, req.params.id);
+  // Check if changing to an existing month (other than current)
+  const existing = db.prepare('SELECT id FROM intention_months WHERE year = ? AND month = ? AND id != ?').get(year, month, req.params.id);
+  if (existing) {
+    return res.status(400).json({ error: 'Miesiąc już istnieje' });
+  }
+
+  db.prepare("UPDATE intention_months SET year = ?, month = ?, updatedAt = datetime('now') WHERE id = ?")
+    .run(year, month, req.params.id);
 
   // Delete old intentions and insert new ones
-  db.prepare('DELETE FROM intentions WHERE weekId = ?').run(req.params.id);
+  db.prepare('DELETE FROM intentions WHERE monthId = ?').run(req.params.id);
 
   if (intentions && intentions.length > 0) {
     const insertIntention = db.prepare(
-      'INSERT INTO intentions (weekId, date, time, intention) VALUES (?, ?, ?, ?)'
+      'INSERT INTO intentions (monthId, date, time, intention) VALUES (?, ?, ?, ?)'
     );
     intentions.forEach(i => {
       insertIntention.run(req.params.id, i.date, i.time, i.intention);
     });
   }
 
-  res.json({ id: parseInt(req.params.id), startDate, endDate, intentions: intentions || [] });
+  res.json({
+    id: parseInt(req.params.id),
+    year,
+    month,
+    monthName: `${MONTH_NAMES_PL[month]} ${year}`,
+    intentions: intentions || []
+  });
 });
 
 router.delete('/intentions/:id', verifyToken, [rules.id], validate, (req, res) => {
-  db.prepare('DELETE FROM intentions WHERE weekId = ?').run(req.params.id);
-  db.prepare('DELETE FROM intention_weeks WHERE id = ?').run(req.params.id);
+  db.prepare('DELETE FROM intentions WHERE monthId = ?').run(req.params.id);
+  db.prepare('DELETE FROM intention_months WHERE id = ?').run(req.params.id);
   res.json({ success: true });
 });
 
 // ============ MASS TIMES ============
 router.get('/mass-times', (req, res) => {
-  const rows = db.prepare('SELECT * FROM mass_times ORDER BY sortOrder, time').all();
+  const rows = db.prepare('SELECT * FROM mass_times ORDER BY dayType, time').all();
   res.json(rows);
 });
 
 router.post('/mass-times', verifyToken, schemas.massTime, validate, (req, res) => {
-  const { time, dayType, description, sortOrder } = req.body;
+  const { time, dayType, description } = req.body;
   const result = db.prepare(
-    'INSERT INTO mass_times (time, dayType, description, sortOrder) VALUES (?, ?, ?, ?)'
-  ).run(time, dayType, description || null, sortOrder || 0);
+    'INSERT INTO mass_times (time, dayType, description) VALUES (?, ?, ?)'
+  ).run(time, dayType, description || null);
   res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
 router.put('/mass-times/:id', verifyToken, [rules.id, ...schemas.massTime], validate, (req, res) => {
-  const { time, dayType, description, sortOrder } = req.body;
+  const { time, dayType, description } = req.body;
   db.prepare(
-    'UPDATE mass_times SET time = ?, dayType = ?, description = ?, sortOrder = ? WHERE id = ?'
-  ).run(time, dayType, description || null, sortOrder || 0, req.params.id);
+    'UPDATE mass_times SET time = ?, dayType = ?, description = ? WHERE id = ?'
+  ).run(time, dayType, description || null, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
 
@@ -153,23 +258,23 @@ router.delete('/mass-times/:id', verifyToken, [rules.id], validate, (req, res) =
 
 // ============ PRIESTS ============
 router.get('/priests', (req, res) => {
-  const rows = db.prepare('SELECT * FROM priests ORDER BY sortOrder, id').all();
+  const rows = db.prepare('SELECT * FROM priests ORDER BY id').all();
   res.json(rows);
 });
 
 router.post('/priests', verifyToken, schemas.priest, validate, (req, res) => {
-  const { name, role, phone, photo, sortOrder } = req.body;
+  const { name, role, phone, photo } = req.body;
   const result = db.prepare(
-    'INSERT INTO priests (name, role, phone, photo, sortOrder) VALUES (?, ?, ?, ?, ?)'
-  ).run(name, role, phone || null, photo || null, sortOrder || 0);
+    'INSERT INTO priests (name, role, phone, photo) VALUES (?, ?, ?, ?)'
+  ).run(name, role, phone || null, photo || null);
   res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
 router.put('/priests/:id', verifyToken, [rules.id, ...schemas.priest], validate, (req, res) => {
-  const { name, role, phone, photo, sortOrder } = req.body;
+  const { name, role, phone, photo } = req.body;
   db.prepare(
-    'UPDATE priests SET name = ?, role = ?, phone = ?, photo = ?, sortOrder = ? WHERE id = ?'
-  ).run(name, role, phone || null, photo || null, sortOrder || 0, req.params.id);
+    'UPDATE priests SET name = ?, role = ?, phone = ?, photo = ? WHERE id = ?'
+  ).run(name, role, phone || null, photo || null, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
 
@@ -205,31 +310,97 @@ router.delete('/priests-from-parish/:id', verifyToken, [rules.id], validate, (re
   res.json({ success: true });
 });
 
+// ============ GALLERY CATEGORIES ============
+router.get('/gallery-categories', (req, res) => {
+  // Get categories with first photo as cover image
+  const rows = db.prepare(`
+    SELECT gc.*,
+      (SELECT g.imageUrl FROM gallery g WHERE g.categoryId = gc.id ORDER BY g.date DESC, g.id DESC LIMIT 1) as coverImage
+    FROM gallery_categories gc
+    ORDER BY gc.createdAt DESC, gc.name
+  `).all();
+  res.json(rows);
+});
+
+router.post('/gallery-categories', verifyToken, schemas.galleryCategory, validate, (req, res) => {
+  const { name } = req.body;
+
+  // Check if category with same name exists
+  const existing = db.prepare('SELECT id FROM gallery_categories WHERE name = ?').get(name);
+  if (existing) {
+    return res.status(400).json({ error: 'Kategoria o tej nazwie już istnieje' });
+  }
+
+  const result = db.prepare(
+    'INSERT INTO gallery_categories (name) VALUES (?)'
+  ).run(name);
+  res.json({ id: result.lastInsertRowid, name });
+});
+
+router.put('/gallery-categories/:id', verifyToken, [rules.id, ...schemas.galleryCategory], validate, (req, res) => {
+  const { name } = req.body;
+
+  // Check if category with same name exists (other than current)
+  const existing = db.prepare('SELECT id FROM gallery_categories WHERE name = ? AND id != ?').get(name, req.params.id);
+  if (existing) {
+    return res.status(400).json({ error: 'Kategoria o tej nazwie już istnieje' });
+  }
+
+  db.prepare(
+    'UPDATE gallery_categories SET name = ? WHERE id = ?'
+  ).run(name, req.params.id);
+  res.json({ id: parseInt(req.params.id), name });
+});
+
+router.delete('/gallery-categories/:id', verifyToken, [rules.id], validate, (req, res) => {
+  // Check if category has photos
+  const photosCount = db.prepare('SELECT COUNT(*) as count FROM gallery WHERE categoryId = ?').get(req.params.id);
+  if (photosCount.count > 0) {
+    return res.status(400).json({
+      error: `Nie można usunąć kategorii - zawiera ${photosCount.count} zdjęć. Najpierw przenieś lub usuń zdjęcia.`
+    });
+  }
+
+  db.prepare('DELETE FROM gallery_categories WHERE id = ?').run(req.params.id);
+  res.json({ success: true });
+});
+
 // ============ GALLERY ============
 router.get('/gallery', (req, res) => {
-  const category = req.query.category;
+  const categoryId = req.query.categoryId;
   let rows;
-  if (category && category !== 'all') {
-    rows = db.prepare('SELECT * FROM gallery WHERE category = ? ORDER BY sortOrder, date DESC').all(category);
+  if (categoryId && categoryId !== 'all') {
+    rows = db.prepare(`
+      SELECT g.*, gc.name as categoryName
+      FROM gallery g
+      LEFT JOIN gallery_categories gc ON g.categoryId = gc.id
+      WHERE g.categoryId = ?
+      ORDER BY g.date DESC, g.id DESC
+    `).all(categoryId);
   } else {
-    rows = db.prepare('SELECT * FROM gallery ORDER BY sortOrder, date DESC').all();
+    rows = db.prepare(`
+      SELECT g.*, gc.name as categoryName
+      FROM gallery g
+      LEFT JOIN gallery_categories gc ON g.categoryId = gc.id
+      ORDER BY g.date DESC, g.id DESC
+    `).all();
   }
   res.json(rows);
 });
 
 router.post('/gallery', verifyToken, schemas.galleryItem, validate, (req, res) => {
-  const { title, description, imageUrl, date, category, sortOrder } = req.body;
+  const { title, description, imageUrl, date, categoryId } = req.body;
   const result = db.prepare(
-    'INSERT INTO gallery (title, description, imageUrl, date, category, sortOrder) VALUES (?, ?, ?, ?, ?, ?)'
-  ).run(title, description || null, imageUrl || null, date || null, category || 'other', sortOrder || 0);
+    'INSERT INTO gallery (title, description, imageUrl, date, categoryId) VALUES (?, ?, ?, ?, ?)'
+  ).run(title, description || null, imageUrl || null, date || null, categoryId || null);
   res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
 router.put('/gallery/:id', verifyToken, [rules.id, ...schemas.galleryItem], validate, (req, res) => {
-  const { title, description, imageUrl, date, category, sortOrder } = req.body;
+  const { title, description, imageUrl, date, categoryId } = req.body;
   db.prepare(
-    'UPDATE gallery SET title = ?, description = ?, imageUrl = ?, date = ?, category = ?, sortOrder = ? WHERE id = ?'
-  ).run(title, description || null, imageUrl || null, date || null, category || 'other', sortOrder || 0, req.params.id);
+    'UPDATE gallery SET title = ?, description = ?, imageUrl = ?, date = ?, categoryId = ? WHERE id = ?'
+  ).run(title, description || null, imageUrl || null, date || null, categoryId || null, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
 
@@ -240,23 +411,23 @@ router.delete('/gallery/:id', verifyToken, [rules.id], validate, (req, res) => {
 
 // ============ HISTORY ============
 router.get('/history', (req, res) => {
-  const rows = db.prepare('SELECT * FROM history ORDER BY year, sortOrder').all();
+  const rows = db.prepare('SELECT * FROM history ORDER BY year DESC, id DESC').all();
   res.json(rows);
 });
 
 router.post('/history', verifyToken, schemas.historyItem, validate, (req, res) => {
-  const { year, title, content, imageUrl, sortOrder } = req.body;
+  const { year, title, content, imageUrl } = req.body;
   const result = db.prepare(
-    'INSERT INTO history (year, title, content, imageUrl, sortOrder) VALUES (?, ?, ?, ?, ?)'
-  ).run(year, title, content, imageUrl || null, sortOrder || 0);
+    'INSERT INTO history (year, title, content, imageUrl) VALUES (?, ?, ?, ?)'
+  ).run(year, title, content, imageUrl || null);
   res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
 router.put('/history/:id', verifyToken, [rules.id, ...schemas.historyItem], validate, (req, res) => {
-  const { year, title, content, imageUrl, sortOrder } = req.body;
+  const { year, title, content, imageUrl } = req.body;
   db.prepare(
-    'UPDATE history SET year = ?, title = ?, content = ?, imageUrl = ?, sortOrder = ? WHERE id = ?'
-  ).run(year, title, content, imageUrl || null, sortOrder || 0, req.params.id);
+    'UPDATE history SET year = ?, title = ?, content = ?, imageUrl = ? WHERE id = ?'
+  ).run(year, title, content, imageUrl || null, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
 
@@ -315,6 +486,57 @@ router.put('/parish-info', verifyToken, schemas.parishInfo, validate, (req, res)
       updatedAt = datetime('now')
     WHERE id = 1
   `).run(address, phone, email, officeHoursWeekday, officeHoursWeekend, bankAccount);
+  res.json({ id: 1, ...req.body });
+});
+
+// ============ ABOUT SECTION ============
+router.get('/about-section', (req, res) => {
+  const row = db.prepare('SELECT * FROM about_section WHERE id = 1').get();
+  res.json(row || {});
+});
+
+router.put('/about-section', verifyToken, schemas.aboutSection, validate, (req, res) => {
+  const { title, subtitle, content, imageUrl, stat1Label, stat1Value, stat2Label, stat2Value, stat3Label, stat3Value } = req.body;
+  db.prepare(`
+    UPDATE about_section SET
+      title = ?, subtitle = ?, content = ?, imageUrl = ?,
+      stat1Label = ?, stat1Value = ?, stat2Label = ?, stat2Value = ?, stat3Label = ?, stat3Value = ?,
+      updatedAt = datetime('now')
+    WHERE id = 1
+  `).run(
+    title || 'Nasza Parafia',
+    subtitle || 'O nas',
+    content || null,
+    imageUrl || null,
+    stat1Label || 'lat historii',
+    stat1Value || '500+',
+    stat2Label || 'parafian',
+    stat2Value || '1000+',
+    stat3Label || 'Msze dziennie',
+    stat3Value || '4'
+  );
+  res.json({ id: 1, ...req.body });
+});
+
+// ============ HISTORY ABOUT SECTION ============
+router.get('/history-about', (req, res) => {
+  const row = db.prepare('SELECT * FROM history_about WHERE id = 1').get();
+  res.json(row || {});
+});
+
+router.put('/history-about', verifyToken, schemas.historyAbout, validate, (req, res) => {
+  const { title, subtitle, content, imageUrl } = req.body;
+  db.prepare(`
+    UPDATE history_about SET
+      title = ?, subtitle = ?, content = ?, imageUrl = ?,
+      updatedAt = datetime('now')
+    WHERE id = 1
+  `).run(
+    title || 'Parafia Trójcy Przenajświętszej',
+    subtitle || 'O parafii',
+    content || null,
+    imageUrl || null
+  );
   res.json({ id: 1, ...req.body });
 });
 

@@ -108,6 +108,15 @@ const api = {
   deletePriestFromParish: (id) =>
     request(`/priests-from-parish/${id}`, { method: 'DELETE' }),
 
+  // Gallery Categories
+  getGalleryCategories: () => request('/gallery-categories'),
+  createGalleryCategory: (data) =>
+    request('/gallery-categories', { method: 'POST', body: JSON.stringify(data) }),
+  updateGalleryCategory: (id, data) =>
+    request(`/gallery-categories/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteGalleryCategory: (id) =>
+    request(`/gallery-categories/${id}`, { method: 'DELETE' }),
+
   // Gallery
   getGallery: () => request('/gallery'),
   createGalleryItem: (data) =>
@@ -146,6 +155,16 @@ const api = {
     request(`/contact-messages/${id}/read`, { method: 'PUT' }),
   deleteMessage: (id) =>
     request(`/contact-messages/${id}`, { method: 'DELETE' }),
+
+  // About Section
+  getAboutSection: () => request('/about-section'),
+  updateAboutSection: (data) =>
+    request('/about-section', { method: 'PUT', body: JSON.stringify(data) }),
+
+  // History About Section
+  getHistoryAbout: () => request('/history-about'),
+  updateHistoryAbout: (data) =>
+    request('/history-about', { method: 'PUT', body: JSON.stringify(data) }),
 }
 
 export default api

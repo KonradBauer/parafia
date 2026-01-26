@@ -12,6 +12,8 @@ import History from '@/pages/History'
 import Events from '@/pages/Events'
 import ParishInfo from '@/pages/ParishInfo'
 import Messages from '@/pages/Messages'
+import AboutSection from '@/pages/AboutSection'
+import HistoryAbout from '@/pages/HistoryAbout'
 import { Loader2 } from 'lucide-react'
 
 function ProtectedRoute({ children }) {
@@ -66,6 +68,8 @@ function App() {
                 <Route path="/wydarzenia" element={<Events />} />
                 <Route path="/dane-parafii" element={<ParishInfo />} />
                 <Route path="/wiadomosci" element={<Messages />} />
+                <Route path="/o-nas" element={<AboutSection />} />
+                <Route path="/o-parafii" element={<HistoryAbout />} />
               </Routes>
             </Layout>
           </ProtectedRoute>

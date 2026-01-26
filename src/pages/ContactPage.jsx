@@ -273,14 +273,14 @@ function ContactPage() {
           <div className="max-w-6xl mx-auto mt-12">
             <div className="rounded-2xl overflow-hidden shadow-lg">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2534.8!2d18.9456!3d50.7789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4710d5c5c5c5c5c5%3A0x0!2sRynek%2021%2C%2042-141%20Przystaj%C5%84!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d638.5!2d18.6927899!3d50.8852467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471094fb81cc1137%3A0x422881b2072afd88!2sKo%C5%9Bci%C3%B3%C5%82%20Przenaj%C5%9Bwi%C4%99tszej%20Tr%C3%B3jcy%20w%20Przystajni!5e0!3m2!1spl!2spl!4v1706300000000!5m2!1spl!2spl"
                 width="100%"
                 height="400"
                 style={{ border: 0 }}
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Lokalizacja Parafii Trójcy Przenajświętszej w Przystajni"
+                title="Lokalizacja Kościoła Przenajświętszej Trójcy w Przystajni"
                 className="w-full"
               />
             </div>

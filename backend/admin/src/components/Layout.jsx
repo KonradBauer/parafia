@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import api from '@/services/api'
 import {
   Megaphone,
   BookOpen,
@@ -14,7 +16,8 @@ import {
   Church,
   Mail,
   LogOut,
-  Cross
+  Cross,
+  Info
 } from 'lucide-react'
 
 const navItems = [
@@ -27,12 +30,51 @@ const navItems = [
   { path: '/historia', label: 'Historia', icon: History },
   { path: '/wydarzenia', label: 'Wydarzenia', icon: Calendar },
   { path: '/dane-parafii', label: 'Dane parafii', icon: Church },
-  { path: '/wiadomosci', label: 'Wiadomości', icon: Mail },
+  { path: '/o-nas', label: 'O nas (strona gł.)', icon: Info },
+  { path: '/o-parafii', label: 'O parafii (historia)', icon: Church },
+  { path: '/wiadomosci', label: 'Wiadomości', icon: Mail, showBadge: true },
 ]
 
 function Layout({ children }) {
   const { logout, user } = useAuth()
   const location = useLocation()
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  // Fetch unread messages count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const messages = await api.getMessages()
+        const unread = messages.filter(m => !m.isRead).length
+        setUnreadCount(unread)
+      } catch (err) {
+        // ignore errors
+      }
+    }
+
+    fetchUnreadCount()
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchUnreadCount, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Refresh count when navigating to messages
+  useEffect(() => {
+    if (location.pathname === '/wiadomosci') {
+      const fetchUnreadCount = async () => {
+        try {
+          const messages = await api.getMessages()
+          const unread = messages.filter(m => !m.isRead).length
+          setUnreadCount(unread)
+        } catch (err) {
+          // ignore errors
+        }
+      }
+      // Small delay to allow for read status updates
+      const timeout = setTimeout(fetchUnreadCount, 500)
+      return () => clearTimeout(timeout)
+    }
+  }, [location.pathname])
 
   const currentPage = navItems.find(item => location.pathname === item.path)
 
@@ -57,6 +99,7 @@ function Layout({ children }) {
         <nav className="flex-1 py-4 overflow-y-auto">
           {navItems.map(item => {
             const Icon = item.icon
+            const showBadge = item.showBadge && unreadCount > 0
             return (
               <NavLink
                 key={item.path}
@@ -70,7 +113,12 @@ function Layout({ children }) {
                 }
               >
                 <Icon className="w-4 h-4" />
-                <span>{item.label}</span>
+                <span className="flex-1">{item.label}</span>
+                {showBadge && (
+                  <span className="bg-destructive text-destructive-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
               </NavLink>
             )
           })}

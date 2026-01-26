@@ -4,20 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="update">
-      <change afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
+    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="backend + admin panel">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/components/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Gallery.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Gallery.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/History.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/History.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/MassTimes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/MassTimes.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Priests.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Priests.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/utils/validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/validators.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/AnnouncementsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/AnnouncementsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useApi.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ContactPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ContactPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/GalleryPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/GalleryPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/HistoryPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HistoryPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/OfficePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/OfficePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/PriestsFromParishPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PriestsFromParishPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +50,13 @@
     &quot;accountId&quot;: &quot;dc9bbe30-5844-435a-9a10-4d71ebb0f031&quot;
   }
 }</component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/backend/package.json" />
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -50,6 +68,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -59,7 +78,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\dev\\parafia-trójcy-przenajswietszej-przystajn\\backend\\node_modules\\typescript\\lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -92,7 +111,10 @@
       <workItem from="1768653185088" duration="2316000" />
       <workItem from="1768837851484" duration="6000" />
       <workItem from="1769254591363" duration="5435000" />
-      <workItem from="1769270200143" duration="2814000" />
+      <workItem from="1769270200143" duration="8297000" />
+      <workItem from="1769279551196" duration="657000" />
+      <workItem from="1769369115217" duration="4955000" />
+      <workItem from="1769431746944" duration="5751000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -118,7 +140,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768653472320</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="backend + admin panel">
+      <option name="closed" value="true" />
+      <created>1769273425941</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1769273425941</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -127,6 +157,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="backend + admin panel" />
+    <option name="LAST_COMMIT_MESSAGE" value="backend + admin panel" />
   </component>
 </project>

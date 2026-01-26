@@ -27,7 +27,6 @@ const initialForm = {
   time: '',
   dayType: 'sunday',
   description: '',
-  sortOrder: 0,
 }
 
 function MassTimes() {
@@ -72,7 +71,6 @@ function MassTimes() {
       time: item.time || '',
       dayType: item.dayType || 'sunday',
       description: item.description || '',
-      sortOrder: item.sortOrder || 0,
     })
     setDialogOpen(true)
   }
@@ -85,10 +83,7 @@ function MassTimes() {
   const handleSave = async () => {
     setSaving(true)
     try {
-      const payload = {
-        ...form,
-        sortOrder: parseInt(form.sortOrder) || 0,
-      }
+      const payload = { ...form }
       if (selected) {
         await api.updateMassTime(selected.id, payload)
         toast({ title: 'Zapisano', description: 'Godzina Mszy została zaktualizowana', variant: 'success' })
@@ -151,11 +146,6 @@ function MassTimes() {
       label: 'Opis',
       render: (value) => value || '-',
     },
-    {
-      key: 'sortOrder',
-      label: 'Kolejność',
-      className: 'w-[100px]',
-    },
   ]
 
   if (loading) return <LoadingState rows={5} />
@@ -185,24 +175,14 @@ function MassTimes() {
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                label="Godzina"
-                name="time"
-                type="time"
-                value={form.time}
-                onChange={handleChange}
-                required
-              />
-              <FormField
-                label="Kolejność"
-                name="sortOrder"
-                type="number"
-                value={form.sortOrder}
-                onChange={handleChange}
-                placeholder="0"
-              />
-            </div>
+            <FormField
+              label="Godzina"
+              name="time"
+              type="time"
+              value={form.time}
+              onChange={handleChange}
+              required
+            />
 
             <FormField
               label="Typ dnia"

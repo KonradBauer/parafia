@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import api from '@/services/api'
 import { useToast } from '@/hooks/useToast'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Dialog,
@@ -14,6 +15,7 @@ import PageHeader from '@/components/PageHeader'
 import LoadingState from '@/components/LoadingState'
 import DeleteConfirm from '@/components/DeleteConfirm'
 import FormField from '@/components/FormField'
+import FileUpload from '@/components/FileUpload'
 import { User, Pencil, Trash2, Phone, Loader2 } from 'lucide-react'
 
 const initialForm = {
@@ -21,7 +23,6 @@ const initialForm = {
   role: '',
   phone: '',
   photo: '',
-  sortOrder: 0,
 }
 
 function Priests() {
@@ -54,6 +55,10 @@ function Priests() {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
+  const handlePhotoChange = (url) => {
+    setForm((prev) => ({ ...prev, photo: url }))
+  }
+
   const openAdd = () => {
     setSelected(null)
     setForm(initialForm)
@@ -67,7 +72,6 @@ function Priests() {
       role: item.role || '',
       phone: item.phone || '',
       photo: item.photo || '',
-      sortOrder: item.sortOrder || 0,
     })
     setDialogOpen(true)
   }
@@ -80,10 +84,7 @@ function Priests() {
   const handleSave = async () => {
     setSaving(true)
     try {
-      const payload = {
-        ...form,
-        sortOrder: parseInt(form.sortOrder) || 0,
-      }
+      const payload = { ...form }
       if (selected) {
         await api.updatePriest(selected.id, payload)
         toast({ title: 'Zapisano', description: 'Duszpasterz został zaktualizowany', variant: 'success' })
@@ -137,7 +138,7 @@ function Priests() {
             <Card key={priest.id}>
               <CardContent className="p-4">
                 <div className="flex gap-4">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <div className="w-20 h-20 rounded-lg bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
                     {priest.photo ? (
                       <img
                         src={priest.photo}
@@ -145,14 +146,14 @@ function Priests() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <User className="w-8 h-8 text-muted-foreground" />
+                      <User className="w-10 h-10 text-muted-foreground" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold truncate">{priest.name}</h3>
                     <p className="text-sm text-muted-foreground">{priest.role}</p>
                     {priest.phone && (
-                      <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                      <p className="text-sm text-muted-foreground flex items-center gap-1 mt-2">
                         <Phone className="w-3 h-3" />
                         {priest.phone}
                       </p>
@@ -214,23 +215,13 @@ function Priests() {
               placeholder="+48 123 456 789"
             />
 
-            <FormField
-              label="URL zdjęcia"
-              name="photo"
-              type="url"
-              value={form.photo}
-              onChange={handleChange}
-              placeholder="https://..."
-            />
-
-            <FormField
-              label="Kolejność"
-              name="sortOrder"
-              type="number"
-              value={form.sortOrder}
-              onChange={handleChange}
-              placeholder="0"
-            />
+            <div className="space-y-2">
+              <Label>Zdjęcie</Label>
+              <FileUpload
+                value={form.photo}
+                onChange={handlePhotoChange}
+              />
+            </div>
           </div>
 
           <DialogFooter>

@@ -9,11 +9,12 @@ import {
   BookOpen,
   AlertCircle,
   Phone,
-  Star,
+  User,
   Loader2
 } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import { usePriests, useMassTimes, useParishInfo } from '../hooks/useApi'
+import { getImageUrl } from '../services/api'
 
 const roleLabels = {
   proboszcz: 'Proboszcz',
@@ -93,7 +94,7 @@ function OfficePage() {
   const { data: massTimes, loading: massTimesLoading } = useMassTimes()
   const { data: parishInfo } = useParishInfo()
 
-  const getMediaUrl = (url) => url
+  const getMediaUrl = (url) => getImageUrl(url)
 
   // Grupuj godziny mszy według typu
   const sundayMasses = massTimes?.filter(m => m.dayType === 'sunday') || []
@@ -134,7 +135,7 @@ function OfficePage() {
                       />
                     ) : (
                       <div className="w-24 h-24 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-                        <Star size={36} className="text-white" aria-hidden="true" />
+                        <User size={36} className="text-white" aria-hidden="true" />
                       </div>
                     )}
                     <h3 className="text-xl font-serif font-bold text-primary-600 dark:text-primary-300 mb-1">

@@ -5,19 +5,19 @@ import {
   FileText,
   Phone,
   Calendar,
-  MapPin,
   ArrowRight,
   ChevronRight,
   Church,
   Loader2
 } from 'lucide-react'
-import { useMassTimes, useAnnouncements, useEvents, useGallery, useParishInfo } from '../hooks/useApi'
+import { useMassTimes, useAnnouncements, useEvents, useGallery, useAboutSection } from '../hooks/useApi'
+import { getImageUrl } from '../services/api'
 
 const formatDate = (date) => {
   return new Date(date).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-const getMediaUrl = (url) => url
+const getMediaUrl = (url) => getImageUrl(url)
 
 // Hero Section
 function HeroSection() {
@@ -235,47 +235,71 @@ function AnnouncementsSection() {
 
 // About Section
 function AboutSection() {
+  const { data: aboutData, loading } = useAboutSection()
+
+  // Defaults
+  const subtitle = aboutData?.subtitle || 'O nas'
+  const title = aboutData?.title || 'Nasza Parafia'
+  const content = aboutData?.content || 'Parafia pw. Trójcy Przenajświętszej w Przystajni to wspólnota wiernych z bogatą historią sięgającą wielu wieków. Nasz kościół jest miejscem modlitwy, spotkania z Bogiem i budowania więzi międzyludzkich.\n\nZapraszamy wszystkich do uczestnictwa w życiu parafialnym - w Mszach Świętych, nabożeństwach, spotkaniach formacyjnych i wspólnotowych.'
+  const imageUrl = aboutData?.imageUrl ? getImageUrl(aboutData.imageUrl) : null
+  const stat1Value = aboutData?.stat1Value || '500+'
+  const stat1Label = aboutData?.stat1Label || 'lat historii'
+  const stat2Value = aboutData?.stat2Value || '1000+'
+  const stat2Label = aboutData?.stat2Label || 'parafian'
+  const stat3Value = aboutData?.stat3Value || '4'
+  const stat3Label = aboutData?.stat3Label || 'Msze dziennie'
+
+  // Split content into paragraphs
+  const paragraphs = content.split('\n').filter(p => p.trim())
+
   return (
     <section className="py-16 md:py-24 bg-white dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <div className="aspect-[4/3] bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl overflow-hidden shadow-xl">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Church size={120} className="text-primary-300" />
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center bg-primary-500/10">
-                <p className="text-primary-400 text-sm">Zdjęcie kościoła</p>
-              </div>
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt={title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Church size={120} className="text-primary-300" />
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center bg-primary-500/10">
+                    <p className="text-primary-400 text-sm">Zdjęcie kościoła</p>
+                  </div>
+                </>
+              )}
             </div>
             <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-gold-500/10 rounded-2xl -z-10" />
             <div className="absolute -top-6 -left-6 w-32 h-32 bg-primary-500/10 rounded-full -z-10" />
           </div>
 
           <div>
-            <span className="inline-block text-gold-500 font-medium mb-2">O nas</span>
-            <h2 className="section-title text-left">Nasza Parafia</h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-              Parafia pw. Trójcy Przenajświętszej w Przystajni to wspólnota wiernych z bogatą historią sięgającą wielu wieków.
-              Nasz kościół jest miejscem modlitwy, spotkania z Bogiem i budowania więzi międzyludzkich.
-            </p>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-              Zapraszamy wszystkich do uczestnictwa w życiu parafialnym - w Mszach Świętych,
-              nabożeństwach, spotkaniach formacyjnych i wspólnotowych.
-            </p>
+            <span className="inline-block text-gold-500 font-medium mb-2">{subtitle}</span>
+            <h2 className="section-title text-left">{title}</h2>
+            {paragraphs.map((paragraph, index) => (
+              <p key={index} className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                {paragraph}
+              </p>
+            ))}
 
             <div className="grid grid-cols-3 gap-4 mb-8">
               <div className="text-center p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
-                <div className="text-3xl font-serif font-bold text-primary-500 dark:text-primary-300">500+</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">lat historii</div>
+                <div className="text-3xl font-serif font-bold text-primary-500 dark:text-primary-300">{stat1Value}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{stat1Label}</div>
               </div>
               <div className="text-center p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
-                <div className="text-3xl font-serif font-bold text-gold-500 dark:text-gold-400">1000+</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">parafian</div>
+                <div className="text-3xl font-serif font-bold text-gold-500 dark:text-gold-400">{stat2Value}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{stat2Label}</div>
               </div>
               <div className="text-center p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
-                <div className="text-3xl font-serif font-bold text-burgundy-500 dark:text-burgundy-400">4</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Msze dziennie</div>
+                <div className="text-3xl font-serif font-bold text-burgundy-500 dark:text-burgundy-400">{stat3Value}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{stat3Label}</div>
               </div>
             </div>
 
@@ -381,7 +405,7 @@ function GalleryPreviewSection() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {(images && images.length > 0 ? images : Array(6).fill(null)).map((image, index) => {
-              const imageUrl = image ? getMediaUrl(image.image) : null
+              const imageUrl = image ? getMediaUrl(image.imageUrl) : null
               return (
                 <div
                   key={image?.id || index}
@@ -420,83 +444,6 @@ function GalleryPreviewSection() {
   )
 }
 
-// Contact Section
-function ContactSection() {
-  const { data: parishInfo } = useParishInfo()
-
-  return (
-    <section className="py-16 md:py-20 bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
-            <span className="inline-block text-gold-500 font-medium mb-2">Kontakt</span>
-            <h2 className="section-title text-left">Skontaktuj się z nami</h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-8">
-              Zapraszamy do kontaktu z kancelarią parafialną. Chętnie odpowiemy na wszystkie pytania.
-            </p>
-
-            <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-4 p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
-                <div className="w-12 h-12 bg-primary-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <MapPin size={24} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-primary-500 dark:text-primary-300">Adres</h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    {parishInfo?.address || 'ul. Rynek 21, 42-141 Przystajń'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
-                <div className="w-12 h-12 bg-gold-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Phone size={24} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-primary-500 dark:text-primary-300">Telefon</h3>
-                  <a
-                    href={`tel:${parishInfo?.phone || '+48343191029'}`}
-                    className="text-gray-600 dark:text-gray-300 hover:text-gold-500 transition-colors"
-                  >
-                    {parishInfo?.phone || '34 319 10 29'}
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4 p-4 bg-cream-100 dark:bg-gray-800 rounded-xl">
-                <div className="w-12 h-12 bg-burgundy-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Clock size={24} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-primary-500 dark:text-primary-300">Kancelaria czynna</h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    {parishInfo?.officeHoursWeekday || 'Pon - Pt: 8:00 - 9:00 oraz 16:00 - 17:00'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <Link to="/kontakt" className="btn-primary inline-flex items-center gap-2">
-              Formularz kontaktowy
-              <ArrowRight size={18} />
-            </Link>
-          </div>
-
-          <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl overflow-hidden min-h-[400px] flex items-center justify-center">
-            <div className="text-center">
-              <MapPin size={48} className="text-primary-300 dark:text-primary-400 mx-auto mb-4" />
-              <p className="text-primary-400 dark:text-gray-300">Mapa Google Maps</p>
-              <p className="text-primary-300 dark:text-gray-400 text-sm">
-                {parishInfo?.address || 'ul. Rynek 21, 42-141 Przystajń'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // Main HomePage component
 function HomePage() {
   return (
@@ -507,7 +454,6 @@ function HomePage() {
       <AboutSection />
       <EventsSection />
       <GalleryPreviewSection />
-      <ContactSection />
     </>
   )
 }

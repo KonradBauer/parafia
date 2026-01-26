@@ -73,8 +73,15 @@ const rules = {
   optionalUrl: (field) =>
     body(field)
       .optional({ nullable: true, checkFalsy: true })
-      .isURL({ protocols: ['http', 'https'], require_protocol: false })
-      .withMessage('Nieprawidłowy adres URL'),
+      .custom((value) => {
+        // Skip validation for empty/null values
+        if (!value || value === '') return true;
+        // Accept local paths like /uploads/... or full URLs
+        if (typeof value === 'string' && (value.startsWith('/') || value.startsWith('http://') || value.startsWith('https://'))) {
+          return true;
+        }
+        throw new Error('Nieprawidłowy adres URL');
+      }),
 
   optionalInt: (field, min = 0, max = 9999) =>
     body(field)
@@ -105,10 +112,12 @@ const schemas = {
     rules.boolean('isNew')
   ],
 
-  // Intentions
-  intentionWeek: [
-    rules.requiredDate('startDate'),
-    rules.requiredDate('endDate'),
+  // Intentions (monthly)
+  intentionMonth: [
+    rules.requiredInt('year', 1900, 2100),
+    body('month')
+      .notEmpty().withMessage('Miesiąc jest wymagany')
+      .isInt({ min: 1, max: 12 }).withMessage('Miesiąc musi być liczbą od 1 do 12'),
     body('intentions')
       .optional()
       .isArray().withMessage('Intencje muszą być tablicą'),
@@ -131,8 +140,7 @@ const schemas = {
       .trim()
       .notEmpty().withMessage('Typ dnia jest wymagany')
       .isIn(['sunday', 'weekday', 'holiday']).withMessage('Nieprawidłowy typ dnia'),
-    rules.optionalString('description', 200),
-    rules.optionalInt('sortOrder', 0, 999)
+    rules.optionalString('description', 200)
   ],
 
   // Priests
@@ -140,8 +148,7 @@ const schemas = {
     rules.requiredString('name', 200),
     rules.requiredString('role', 200),
     rules.optionalPhone('phone'),
-    rules.optionalUrl('photo'),
-    rules.optionalInt('sortOrder', 0, 999)
+    rules.optionalUrl('photo')
   ],
 
   // Priests from parish
@@ -152,16 +159,18 @@ const schemas = {
     rules.optionalString('notes', 2000)
   ],
 
+  // Gallery Categories
+  galleryCategory: [
+    rules.requiredString('name', 100)
+  ],
+
   // Gallery
   galleryItem: [
     rules.requiredString('title', 200),
     rules.optionalString('description', 2000),
     rules.optionalUrl('imageUrl'),
     rules.optionalDate('date'),
-    body('category')
-      .optional({ nullable: true, checkFalsy: true })
-      .isIn(['events', 'church', 'parish', 'other']).withMessage('Nieprawidłowa kategoria'),
-    rules.optionalInt('sortOrder', 0, 999)
+    rules.optionalInt('categoryId', 1, 999999)
   ],
 
   // History
@@ -169,8 +178,7 @@ const schemas = {
     rules.requiredInt('year', 0, 2100),
     rules.requiredString('title', 200),
     rules.requiredString('content', 10000),
-    rules.optionalUrl('imageUrl'),
-    rules.optionalInt('sortOrder', 0, 999)
+    rules.optionalUrl('imageUrl')
   ],
 
   // Events
@@ -204,6 +212,28 @@ const schemas = {
   login: [
     rules.requiredString('username', 100),
     rules.requiredString('password', 100)
+  ],
+
+  // About Section
+  aboutSection: [
+    rules.optionalString('title', 200),
+    rules.optionalString('subtitle', 200),
+    rules.optionalString('content', 5000),
+    rules.optionalUrl('imageUrl'),
+    rules.optionalString('stat1Label', 100),
+    rules.optionalString('stat1Value', 50),
+    rules.optionalString('stat2Label', 100),
+    rules.optionalString('stat2Value', 50),
+    rules.optionalString('stat3Label', 100),
+    rules.optionalString('stat3Value', 50)
+  ],
+
+  // History About Section
+  historyAbout: [
+    rules.optionalString('title', 200),
+    rules.optionalString('subtitle', 200),
+    rules.optionalString('content', 5000),
+    rules.optionalUrl('imageUrl')
   ]
 };
 
