@@ -3,7 +3,16 @@
     "allow": [
       "Bash(npm install)",
       "Bash(npm run dev:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(dir:*)",
+      "Bash(npm run build:*)",
+      "Bash(ssh root@157.173.96.140 \"node --version 2>/dev/null || echo ''Node not installed''\")",
+      "Bash(ssh root@157.173.96.140 \"cat /etc/os-release | head -5\")",
+      "Bash(ssh root@157.173.96.140 \"curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs\")",
+      "Bash(ssh root@157.173.96.140 \"apt remove -y libnode-dev && apt-get install -y nodejs\")",
+      "Bash(ssh root@157.173.96.140 \"node --version && npm --version && npm install -g pm2\")",
+      "Bash(ssh:*)",
+      "Bash(scp:*)"
     ]
   }
 }
