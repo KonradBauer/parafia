@@ -4,31 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="backend + admin panel">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/components/Layout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Gallery.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Gallery.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/History.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/History.jsx" afterDir="false" />
+    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="update admin panel and web">
       <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/MassTimes.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/MassTimes.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Priests.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Priests.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/services/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/validators.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ContactPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ContactPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/GalleryPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/GalleryPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/HomePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OfficePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/OfficePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +91,7 @@
       <workItem from="1769270200143" duration="8297000" />
       <workItem from="1769279551196" duration="657000" />
       <workItem from="1769369115217" duration="4955000" />
-      <workItem from="1769431746944" duration="5751000" />
+      <workItem from="1769431746944" duration="6130000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -148,7 +125,23 @@
       <option name="project" value="LOCAL" />
       <updated>1769273425941</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update admin panel and web">
+      <option name="closed" value="true" />
+      <created>1769449526131</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1769449526131</updated>
+    </task>
+    <task id="LOCAL-00006" summary="update admin panel and web">
+      <option name="closed" value="true" />
+      <created>1769449531782</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1769449531782</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,6 +151,7 @@
     <MESSAGE value="init" />
     <MESSAGE value="update" />
     <MESSAGE value="backend + admin panel" />
-    <option name="LAST_COMMIT_MESSAGE" value="backend + admin panel" />
+    <MESSAGE value="update admin panel and web" />
+    <option name="LAST_COMMIT_MESSAGE" value="update admin panel and web" />
   </component>
 </project>
