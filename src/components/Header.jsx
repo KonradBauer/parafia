@@ -249,31 +249,6 @@ function Header() {
             ))}
           </ul>
 
-          <div
-            className={`absolute bottom-10 left-0 right-0 flex flex-col items-center gap-3 transition-all duration-300 ${
-              isOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-            }`}
-            style={{ transitionDelay: isOpen ? `${navigation.length * 50 + 200}ms` : '0ms' }}
-          >
-            <a
-              href="tel:+48343191029"
-              className="flex items-center gap-3 text-white/60 hover:text-gold-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-400 rounded-lg px-4 py-2"
-              aria-label="Zadzwoń: 34 319 10 29"
-              tabIndex={isOpen ? 0 : -1}
-            >
-              <Phone size={18} aria-hidden="true" />
-              <span>34 319 10 29</span>
-            </a>
-            <a
-              href="mailto:przystajn@archidiecezja.pl"
-              className="flex items-center gap-3 text-white/60 hover:text-gold-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-400 rounded-lg px-4 py-2"
-              aria-label="Wyślij email do parafii"
-              tabIndex={isOpen ? 0 : -1}
-            >
-              <Mail size={18} aria-hidden="true" />
-              <span>przystajn@archidiecezja.pl</span>
-            </a>
-          </div>
         </nav>
       </div>
     </>
