@@ -38,8 +38,8 @@ function HeroSection() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-6 animate-fade-in mt-10">
+        <div className="max-w-4xl mx-auto py-10">
+          <div className="mb-6 animate-fade-in">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gold-500/20 rounded-full border-2 border-gold-400/50">
               <span className="text-gold-400 text-4xl font-serif">✝</span>
             </div>
