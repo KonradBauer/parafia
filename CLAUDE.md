@@ -1,63 +1,95 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Zasady pracy
+
 Pracuj ze mną wyłącznie w trybie planowania i iteracyjnego doprecyzowania problemu.
 Nie przechodź do realizacji, dopóki wyraźnie Cię o to nie poproszę.
 
-Zasady pracy:
+1. Najpierw krótko opisz, co zrozumiałeś i jakie jest zadanie.
+2. Wypisz jawnie wszystkie założenia.
+3. Poczekaj na weryfikację lub korektę.
+4. Zaproponuj plan rozwiązania (bez realizacji) — co, jak, dlaczego.
+5. Oceń pewność (1–10) dla: zrozumienia problemu i trafności rozwiązania. Jeśli < 7 — przemyśl ponownie.
+6. Realizuj etapami — czekaj na zgodę przed każdym.
+7. Jeśli brakuje danych, problem jest niejednoznaczny lub wymagania sprzeczne — zatrzymaj się i zakomunikuj.
 
-Najpierw krótko i zwięźle opisz, co zrozumiałeś z mojego opisu oraz jakie jest Twoje zadanie.
+## Stan produkcji
 
-Jeśli czegoś nie wiesz lub musisz przyjąć założenia — wypisz je jawnie.
+Szczegóły wdrożenia VPS, konfiguracji Apache/PM2 i lista TODO znajdują się w `prod.md`.
 
-Poczekaj na moją weryfikację lub korektę.
+## Komendy
 
-Gdy potwierdzę, że rozumiesz problem:
+```bash
+# Development (wszystko naraz)
+npm run dev
 
-Zaproponuj plan rozwiązania (bez realizacji).
+# Poszczególne serwisy
+npm run dev:frontend    # Vite port 5173
+npm run dev:backend     # Express port 3001 (--watch)
+npm run dev:admin       # Vite port 5174
 
-Następnie krótko wyjaśnij:
+# Build
+npm run build           # frontend + admin
+npm run build:frontend  # → dist/
+npm run build:backend   # → backend/admin-dist/
 
-co chcesz zrobić
+# Produkcja
+npm run start           # cd backend && node server.js
 
-jak chcesz to zrobić
+# Instalacja zależności (root + backend + admin)
+npm run install:all
+```
 
-dlaczego taki wybór ma sens
-(jeśli temat jest techniczny — tłumacz jak dla osoby nietechnicznej)
+Brak testów w projekcie.
 
-Krytyczny krok:
+## Architektura
 
-Oceń swoją pewność dla każdego kluczowego elementu planu w skali 1–10, osobno:
+Monorepo z trzema aplikacjami i jednym backendem:
 
-poziom zrozumienia problemu
+```
+Frontend (React 18 + Vite + Tailwind)
+  → publiczna strona parafii, port 5173 (dev)
+  → src/services/api.js — klient API (VITE_API_URL || '/api')
+  → src/hooks/useApi.js — hooki React do pobierania danych
 
-trafność zaproponowanego rozwiązania
+Backend (Express + SQLite via better-sqlite3)
+  → port 3001, API pod /api
+  → serwuje frontend z backend/public/, admin z backend/admin-dist/
+  → backend/db.js — schemat bazy, auto-inicjalizacja tabel z danymi domyślnymi
+  → backend/routes.js — wszystkie endpointy API
+  → backend/auth.js — JWT (7 dni), jeden użytkownik admin z .env
 
-Jeśli którakolwiek ocena < 7:
+Admin Panel (React 18 + Vite + Radix UI + Tailwind)
+  → panel CMS pod /admin, port 5174 (dev)
+  → backend/admin/src/services/api.js — klient API z auto-JWT
+  → auto-logout przy 401/403
+```
 
-MUSISZ ponownie przemyśleć problem
+## Kluczowe wzorce
 
-poprawić plan
+- **Sanityzacja** (`backend/middleware/sanitize.js`): Wszystkie POST/PUT oczyszczane z XSS. Pola HTML (content, description) — dozwolone `<p>, <br>, <strong>, <em>, <ul>, <ol>, <li>, <a>, <h3>, <h4>`. Reszta — strip all HTML.
+- **Walidacja** (`backend/utils/validators.js`): Schematy express-validator per endpoint.
+- **Rate limiting**: 100 req/15min (prod), 5 prób logowania/15min.
+- **Upload**: JPEG/PNG/GIF/WebP, max 5MB, serwowane z `/uploads/`.
 
-i ponownie dokonać oceny
+## Baza danych (SQLite)
 
-aż wszystkie kluczowe elementy osiągną minimum 7/10
+14 tabel: `announcements`, `intention_months`, `intentions`, `mass_times`, `priests`, `priests_from_parish`, `gallery_categories`, `gallery`, `history`, `events`, `parish_info`, `about_section`, `history_about`, `contact_messages`.
 
-Dopiero gdy wszystko ≥ 7:
+Singletony (jeden rekord): `parish_info`, `about_section`, `history_about`.
 
-Wygeneruj ostateczną wersję planu.
+## API
 
-Jeśli plan jest złożony — podziel go na etapy.
+- **Publiczne**: GET na wszystkich zasobach + POST `/api/contact-messages`
+- **Chronione** (JWT Bearer): pełny CRUD, upload plików, zarządzanie wiadomościami
+- **Auth**: POST `/api/auth/login`, GET `/api/auth/verify`
 
-Realizacja:
+## Deploy pipeline
 
-Nigdy nie realizuj całego planu naraz, jeśli jest rozbudowany.
-
-Czekaj na moją zgodę przed rozpoczęciem każdego etapu.
-
-Jeśli na którymkolwiek etapie uznasz, że:
-
-brakuje danych
-
-problem jest niejednoznaczny
-
-moje wymagania są sprzeczne
-
-→ zatrzymaj się i jasno to zakomunikuj zamiast zgadywać.
+1. `npm run build:frontend` → `dist/`
+2. `cp -r dist/* backend/public/` (ręczne)
+3. `npm run build:backend` → `backend/admin-dist/`
+4. PM2: `pm2 start server.js --name parafia-cms --env NODE_ENV=production`
+5. Apache reverse proxy: port 80 → 127.0.0.1:3001

@@ -11,9 +11,9 @@ const PORT = process.env.PORT || 3001;
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Rate limiting
-const limiter = rateLimit({
+const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isProduction ? 100 : 1000, // limit requests per windowMs
+  max: isProduction ? 1000 : 2000, // limit API requests per windowMs
   message: { error: 'Zbyt wiele żądań, spróbuj ponownie później' }
 });
 
@@ -35,10 +35,10 @@ app.use(cors({
 
 // Middleware
 app.use(express.json({ limit: '10mb' }));
-app.use(limiter);
 
-// Auth rate limiting
+// Rate limiting — only API endpoints, not static files
 app.use('/api/auth/login', authLimiter);
+app.use('/api', apiLimiter);
 
 // API routes
 app.use('/api', routes);

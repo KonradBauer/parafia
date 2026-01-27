@@ -52,6 +52,18 @@ function Header() {
     }
   }, [isOpen])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
   // Announce page changes to screen readers
   useEffect(() => {
     const pageTitle = navigation.find(item => item.href === location.pathname)?.name || 'Strona'
@@ -168,76 +180,102 @@ function Header() {
           </div>
         </div>
 
-        {/* Mobile navigation */}
-        <div
-          id="mobile-navigation"
-          className={`lg:hidden overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-          }`}
-          aria-hidden={!isOpen}
-        >
-          <nav
-            ref={mobileNavRef}
-            className="container mx-auto px-4 py-4 bg-white dark:bg-gray-900 border-t dark:border-gray-700"
-            aria-label="Menu mobilne"
-          >
-            <ul className="flex flex-col gap-1" role="list">
-              {navigation.map((item) => (
-                <li key={item.name}>
-                  {item.external ? (
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-3 rounded-lg font-medium transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/50 hover:text-primary-500 dark:hover:text-primary-300 inline-flex items-center gap-2 w-full focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      aria-label={`${item.name} (otwiera się w nowej karcie)`}
-                      tabIndex={isOpen ? 0 : -1}
-                    >
-                      {item.name}
-                      <ExternalLink size={16} aria-hidden="true" />
-                    </a>
-                  ) : (
-                    <Link
-                      to={item.href}
-                      className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 block focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                        location.pathname === item.href
-                          ? 'bg-primary-500 dark:bg-primary-600 text-white'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/50 hover:text-primary-500 dark:hover:text-primary-300'
-                      }`}
-                      aria-current={location.pathname === item.href ? 'page' : undefined}
-                      tabIndex={isOpen ? 0 : -1}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-
-            {/* Mobile contact info */}
-            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <a
-                href="tel:+48343191029"
-                className="flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg"
-                aria-label="Zadzwoń: 34 319 10 29"
-                tabIndex={isOpen ? 0 : -1}
-              >
-                <Phone size={18} className="text-primary-500 dark:text-primary-400" aria-hidden="true" />
-                <span>34 319 10 29</span>
-              </a>
-              <a
-                href="mailto:przystajn@archidiecezja.pl"
-                className="flex items-center gap-3 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg"
-                aria-label="Wyślij email do parafii"
-                tabIndex={isOpen ? 0 : -1}
-              >
-                <Mail size={18} className="text-primary-500 dark:text-primary-400" aria-hidden="true" />
-                <span>przystajn@archidiecezja.pl</span>
-              </a>
-            </div>
-          </nav>
-        </div>
       </header>
+
+      {/* Mobile fullscreen navigation */}
+      <div
+        id="mobile-navigation"
+        className={`lg:hidden fixed inset-0 z-50 transition-all duration-300 ${
+          isOpen
+            ? 'opacity-100 visible'
+            : 'opacity-0 invisible pointer-events-none'
+        }`}
+        aria-hidden={!isOpen}
+      >
+        <div className="absolute inset-0 bg-primary-500/95 dark:bg-gray-900/95 backdrop-blur-sm" />
+
+        <button
+          onClick={() => setIsOpen(false)}
+          className="absolute top-6 right-6 z-10 p-2 text-white/80 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-gold-400 rounded-lg"
+          aria-label="Zamknij menu"
+          tabIndex={isOpen ? 0 : -1}
+        >
+          <X size={32} aria-hidden="true" />
+        </button>
+
+        <nav
+          ref={mobileNavRef}
+          className="relative h-full flex flex-col items-center justify-center px-6"
+          aria-label="Menu mobilne"
+        >
+          <ul className="flex flex-col items-center gap-1" role="list">
+            {navigation.map((item, index) => (
+              <li
+                key={item.name}
+                className={`transition-all duration-300 ${
+                  isOpen
+                    ? 'translate-y-0 opacity-100'
+                    : 'translate-y-4 opacity-0'
+                }`}
+                style={{ transitionDelay: isOpen ? `${index * 50 + 100}ms` : '0ms' }}
+              >
+                {item.external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 px-6 py-3 text-xl font-medium text-white/80 hover:text-gold-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-400 rounded-lg"
+                    aria-label={`${item.name} (otwiera się w nowej karcie)`}
+                    tabIndex={isOpen ? 0 : -1}
+                  >
+                    {item.name}
+                    <ExternalLink size={18} aria-hidden="true" />
+                  </a>
+                ) : (
+                  <Link
+                    to={item.href}
+                    className={`block px-6 py-3 text-xl font-medium transition-colors text-center rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-400 ${
+                      location.pathname === item.href
+                        ? 'text-gold-300'
+                        : 'text-white/80 hover:text-white'
+                    }`}
+                    aria-current={location.pathname === item.href ? 'page' : undefined}
+                    tabIndex={isOpen ? 0 : -1}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <div
+            className={`absolute bottom-10 left-0 right-0 flex flex-col items-center gap-3 transition-all duration-300 ${
+              isOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
+            style={{ transitionDelay: isOpen ? `${navigation.length * 50 + 200}ms` : '0ms' }}
+          >
+            <a
+              href="tel:+48343191029"
+              className="flex items-center gap-3 text-white/60 hover:text-gold-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-400 rounded-lg px-4 py-2"
+              aria-label="Zadzwoń: 34 319 10 29"
+              tabIndex={isOpen ? 0 : -1}
+            >
+              <Phone size={18} aria-hidden="true" />
+              <span>34 319 10 29</span>
+            </a>
+            <a
+              href="mailto:przystajn@archidiecezja.pl"
+              className="flex items-center gap-3 text-white/60 hover:text-gold-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-400 rounded-lg px-4 py-2"
+              aria-label="Wyślij email do parafii"
+              tabIndex={isOpen ? 0 : -1}
+            >
+              <Mail size={18} aria-hidden="true" />
+              <span>przystajn@archidiecezja.pl</span>
+            </a>
+          </div>
+        </nav>
+      </div>
     </>
   )
 }

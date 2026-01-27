@@ -12,7 +12,8 @@
       "Bash(ssh root@157.173.96.140 \"apt remove -y libnode-dev && apt-get install -y nodejs\")",
       "Bash(ssh root@157.173.96.140 \"node --version && npm --version && npm install -g pm2\")",
       "Bash(ssh:*)",
-      "Bash(scp:*)"
+      "Bash(scp:*)",
+      "Bash(npm run build:frontend:*)"
     ]
   }
 }
