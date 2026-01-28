@@ -82,10 +82,9 @@ function Layout({ children }) {
     }
   }, [location.pathname])
 
-  // Close mobile sidebar + collapse desktop sidebar on navigation
+  // Close mobile sidebar on navigation
   useEffect(() => {
     setSidebarOpen(false)
-    setSidebarCollapsed(true)
   }, [location.pathname])
 
   const currentPage = navItems.find(item => location.pathname === item.path)

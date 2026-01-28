@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="mobile main section padding">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/components/DataTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/components/DataTable.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/components/Layout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/components/PageHeader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/components/PageHeader.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/components/ui/dialog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/components/ui/dialog.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Announcements.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Announcements.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Events.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Events.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/ParishInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/ParishInfo.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="pa rwd" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -103,7 +94,7 @@
       <workItem from="1769454599715" duration="12000" />
       <workItem from="1769514664141" duration="4077000" />
       <workItem from="1769519157988" duration="1996000" />
-      <workItem from="1769592828393" duration="718000" />
+      <workItem from="1769592828393" duration="1207000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -201,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769520852539</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="pa rwd">
+      <option name="closed" value="true" />
+      <created>1769593947651</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1769593947651</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,6 +214,7 @@
     <MESSAGE value="limiter, mobile nav" />
     <MESSAGE value="mobile layout" />
     <MESSAGE value="mobile main section padding" />
-    <option name="LAST_COMMIT_MESSAGE" value="mobile main section padding" />
+    <MESSAGE value="pa rwd" />
+    <option name="LAST_COMMIT_MESSAGE" value="pa rwd" />
   </component>
 </project>
