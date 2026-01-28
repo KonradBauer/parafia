@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react'
 
 function PageHeader({ title, description, onAdd, addLabel = 'Dodaj' }) {
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
       <div>
         {title && <h2 className="text-lg font-semibold">{title}</h2>}
         {description && (
@@ -11,7 +11,7 @@ function PageHeader({ title, description, onAdd, addLabel = 'Dodaj' }) {
         )}
       </div>
       {onAdd && (
-        <Button onClick={onAdd}>
+        <Button onClick={onAdd} className="w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           {addLabel}
         </Button>

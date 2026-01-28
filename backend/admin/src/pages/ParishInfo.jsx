@@ -90,7 +90,7 @@ function ParishInfo() {
             rows={3}
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               label="Telefon"
               name="phone"
@@ -109,7 +109,7 @@ function ParishInfo() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               label="Godziny kancelarii (dni powszednie)"
               name="officeHoursWeekday"
