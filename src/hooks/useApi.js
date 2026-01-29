@@ -40,8 +40,8 @@ export function useAnnouncements() {
 
 export function useIntentions() {
   return useApi(async () => {
-    const { getIntentions } = await import('../services/api');
-    return getIntentions();
+    const { getLatestIntention } = await import('../services/api');
+    return getLatestIntention();
   });
 }
 

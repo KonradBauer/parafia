@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="pa rwd" />
+    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="pa rwd">
+      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Announcements.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Announcements.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/utils/validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/validators.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,7 +61,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/dev/parafia-trójcy-przenajswietszej-przystajn&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/dev/react-cms-starter&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -94,7 +108,11 @@
       <workItem from="1769454599715" duration="12000" />
       <workItem from="1769514664141" duration="4077000" />
       <workItem from="1769519157988" duration="1996000" />
-      <workItem from="1769592828393" duration="1207000" />
+      <workItem from="1769592828393" duration="1463000" />
+      <workItem from="1769608155011" duration="2455000" />
+      <workItem from="1769674192551" duration="1668000" />
+      <workItem from="1769677898259" duration="4498000" />
+      <workItem from="1769693010387" duration="633000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -200,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769593947651</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="pa rwd">
+      <option name="closed" value="true" />
+      <created>1769594170022</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1769594170022</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

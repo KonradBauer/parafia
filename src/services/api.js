@@ -35,6 +35,7 @@ export const getAnnouncement = (id) => fetchApi(`/announcements/${id}`);
 // Intentions
 export const getIntentions = () => fetchApi('/intentions');
 export const getIntention = (id) => fetchApi(`/intentions/${id}`);
+export const getLatestIntention = () => fetchApi('/intentions/latest');
 
 // Mass Times
 export const getMassTimes = () => fetchApi('/mass-times');
@@ -80,6 +81,7 @@ export default {
   getAnnouncement,
   getIntentions,
   getIntention,
+  getLatestIntention,
   getMassTimes,
   getPriests,
   getPriestsFromParish,

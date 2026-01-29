@@ -107,30 +107,13 @@ const schemas = {
   announcement: [
     rules.requiredString('title', 200),
     rules.requiredDate('date'),
-    rules.optionalString('week', 100),
     rules.optionalString('content', 10000),
-    rules.boolean('isNew')
   ],
 
-  // Intentions (monthly)
-  intentionMonth: [
-    rules.requiredInt('year', 1900, 2100),
-    body('month')
-      .notEmpty().withMessage('Miesiąc jest wymagany')
-      .isInt({ min: 1, max: 12 }).withMessage('Miesiąc musi być liczbą od 1 do 12'),
-    body('intentions')
-      .optional()
-      .isArray().withMessage('Intencje muszą być tablicą'),
-    body('intentions.*.date')
-      .optional()
-      .matches(/^\d{4}-\d{2}-\d{2}$/).withMessage('Data intencji musi być w formacie YYYY-MM-DD'),
-    body('intentions.*.time')
-      .optional()
-      .matches(/^\d{2}:\d{2}$/).withMessage('Godzina intencji musi być w formacie HH:MM'),
-    body('intentions.*.intention')
-      .optional()
-      .trim()
-      .isLength({ max: 1000 }).withMessage('Intencja może mieć max 1000 znaków')
+  // Intention entries (rich text)
+  intentionEntry: [
+    rules.optionalString('title', 200),
+    rules.requiredString('content', 50000),
   ],
 
   // Mass Times

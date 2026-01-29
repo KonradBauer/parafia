@@ -108,18 +108,18 @@ router.get('/announcements/:id', [rules.id], validate, (req, res) => {
 });
 
 router.post('/announcements', verifyToken, schemas.announcement, validate, (req, res) => {
-  const { title, date, week, content, isNew } = req.body;
+  const { title, date, content } = req.body;
   const result = db.prepare(
-    'INSERT INTO announcements (title, date, week, content, isNew) VALUES (?, ?, ?, ?, ?)'
-  ).run(title, date, week || null, content || null, isNew ? 1 : 0);
+    'INSERT INTO announcements (title, date, content) VALUES (?, ?, ?)'
+  ).run(title, date, content || null);
   res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
 router.put('/announcements/:id', verifyToken, [rules.id, ...schemas.announcement], validate, (req, res) => {
-  const { title, date, week, content, isNew } = req.body;
+  const { title, date, content } = req.body;
   db.prepare(
-    "UPDATE announcements SET title = ?, date = ?, week = ?, content = ?, isNew = ?, updatedAt = datetime('now') WHERE id = ?"
-  ).run(title, date, week || null, content || null, isNew ? 1 : 0, req.params.id);
+    "UPDATE announcements SET title = ?, date = ?, content = ?, updatedAt = datetime('now') WHERE id = ?"
+  ).run(title, date, content || null, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
 
@@ -128,104 +128,41 @@ router.delete('/announcements/:id', verifyToken, [rules.id], validate, (req, res
   res.json({ success: true });
 });
 
-// ============ INTENTIONS (MONTHLY) ============
-const MONTH_NAMES_PL = [
-  '', 'Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
-  'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'
-];
-
+// ============ INTENTIONS (RICH TEXT ENTRIES) ============
 router.get('/intentions', (req, res) => {
-  const months = db.prepare('SELECT * FROM intention_months ORDER BY year DESC, month DESC').all();
-  const intentions = db.prepare('SELECT * FROM intentions ORDER BY date, time').all();
+  const rows = db.prepare('SELECT * FROM intention_entries ORDER BY createdAt DESC').all();
+  res.json(rows);
+});
 
-  const result = months.map(m => ({
-    ...m,
-    monthName: `${MONTH_NAMES_PL[m.month]} ${m.year}`,
-    intentions: intentions.filter(i => i.monthId === m.id)
-  }));
-  res.json(result);
+router.get('/intentions/latest', (req, res) => {
+  const row = db.prepare('SELECT * FROM intention_entries ORDER BY createdAt DESC LIMIT 1').get();
+  res.json(row || null);
 });
 
 router.get('/intentions/:id', [rules.id], validate, (req, res) => {
-  const month = db.prepare('SELECT * FROM intention_months WHERE id = ?').get(req.params.id);
-  if (!month) return res.status(404).json({ error: 'Nie znaleziono' });
-
-  const intentions = db.prepare('SELECT * FROM intentions WHERE monthId = ? ORDER BY date, time').all(req.params.id);
-  res.json({
-    ...month,
-    monthName: `${MONTH_NAMES_PL[month.month]} ${month.year}`,
-    intentions
-  });
+  const row = db.prepare('SELECT * FROM intention_entries WHERE id = ?').get(req.params.id);
+  if (row) res.json(row);
+  else res.status(404).json({ error: 'Nie znaleziono' });
 });
 
-router.post('/intentions', verifyToken, schemas.intentionMonth, validate, (req, res) => {
-  const { year, month, intentions } = req.body;
-
-  // Check if month already exists
-  const existing = db.prepare('SELECT id FROM intention_months WHERE year = ? AND month = ?').get(year, month);
-  if (existing) {
-    return res.status(400).json({ error: 'Miesiąc już istnieje' });
-  }
-
-  const monthResult = db.prepare(
-    'INSERT INTO intention_months (year, month) VALUES (?, ?)'
-  ).run(year, month);
-  const monthId = monthResult.lastInsertRowid;
-
-  if (intentions && intentions.length > 0) {
-    const insertIntention = db.prepare(
-      'INSERT INTO intentions (monthId, date, time, intention) VALUES (?, ?, ?, ?)'
-    );
-    intentions.forEach(i => {
-      insertIntention.run(monthId, i.date, i.time, i.intention);
-    });
-  }
-
-  res.json({
-    id: monthId,
-    year,
-    month,
-    monthName: `${MONTH_NAMES_PL[month]} ${year}`,
-    intentions: intentions || []
-  });
+router.post('/intentions', verifyToken, schemas.intentionEntry, validate, (req, res) => {
+  const { title, content } = req.body;
+  const result = db.prepare(
+    'INSERT INTO intention_entries (title, content) VALUES (?, ?)'
+  ).run(title || null, content);
+  res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
-router.put('/intentions/:id', verifyToken, [rules.id, ...schemas.intentionMonth], validate, (req, res) => {
-  const { year, month, intentions } = req.body;
-
-  // Check if changing to an existing month (other than current)
-  const existing = db.prepare('SELECT id FROM intention_months WHERE year = ? AND month = ? AND id != ?').get(year, month, req.params.id);
-  if (existing) {
-    return res.status(400).json({ error: 'Miesiąc już istnieje' });
-  }
-
-  db.prepare("UPDATE intention_months SET year = ?, month = ?, updatedAt = datetime('now') WHERE id = ?")
-    .run(year, month, req.params.id);
-
-  // Delete old intentions and insert new ones
-  db.prepare('DELETE FROM intentions WHERE monthId = ?').run(req.params.id);
-
-  if (intentions && intentions.length > 0) {
-    const insertIntention = db.prepare(
-      'INSERT INTO intentions (monthId, date, time, intention) VALUES (?, ?, ?, ?)'
-    );
-    intentions.forEach(i => {
-      insertIntention.run(req.params.id, i.date, i.time, i.intention);
-    });
-  }
-
-  res.json({
-    id: parseInt(req.params.id),
-    year,
-    month,
-    monthName: `${MONTH_NAMES_PL[month]} ${year}`,
-    intentions: intentions || []
-  });
+router.put('/intentions/:id', verifyToken, [rules.id, ...schemas.intentionEntry], validate, (req, res) => {
+  const { title, content } = req.body;
+  db.prepare(
+    "UPDATE intention_entries SET title = ?, content = ?, updatedAt = datetime('now') WHERE id = ?"
+  ).run(title || null, content, req.params.id);
+  res.json({ id: parseInt(req.params.id), ...req.body });
 });
 
 router.delete('/intentions/:id', verifyToken, [rules.id], validate, (req, res) => {
-  db.prepare('DELETE FROM intentions WHERE monthId = ?').run(req.params.id);
-  db.prepare('DELETE FROM intention_months WHERE id = ?').run(req.params.id);
+  db.prepare('DELETE FROM intention_entries WHERE id = ?').run(req.params.id);
   res.json({ success: true });
 });
 

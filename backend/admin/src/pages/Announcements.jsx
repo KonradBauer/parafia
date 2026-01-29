@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import api from '@/services/api'
 import { useToast } from '@/hooks/useToast'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
   DialogContent,
@@ -20,9 +19,7 @@ import { Megaphone, Loader2 } from 'lucide-react'
 const initialForm = {
   title: '',
   date: '',
-  week: '',
   content: '',
-  isNew: false,
 }
 
 function Announcements() {
@@ -66,9 +63,7 @@ function Announcements() {
     setForm({
       title: item.title || '',
       date: item.date || '',
-      week: item.week || '',
       content: item.content || '',
-      isNew: !!item.isNew,
     })
     setDialogOpen(true)
   }
@@ -115,23 +110,14 @@ function Announcements() {
     {
       key: 'title',
       label: 'Tytuł',
-      render: (value, row) => (
-        <div className="flex items-center gap-2">
-          <span className="font-medium">{value}</span>
-          {row.isNew ? <Badge variant="secondary">Nowe</Badge> : null}
-        </div>
+      render: (value) => (
+        <span className="font-medium">{value}</span>
       ),
     },
     {
       key: 'date',
       label: 'Data',
       className: 'w-[120px]',
-    },
-    {
-      key: 'week',
-      label: 'Tydzień',
-      className: 'w-[150px]',
-      render: (value) => value || '-',
     },
   ]
 
@@ -171,23 +157,14 @@ function Announcements() {
               required
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField
-                label="Data"
-                name="date"
-                type="date"
-                value={form.date}
-                onChange={handleChange}
-                required
-              />
-              <FormField
-                label="Tydzień (opcjonalnie)"
-                name="week"
-                value={form.week}
-                onChange={handleChange}
-                placeholder="np. I Tydzień Adwentu"
-              />
-            </div>
+            <FormField
+              label="Data"
+              name="date"
+              type="date"
+              value={form.date}
+              onChange={handleChange}
+              required
+            />
 
             <FormField
               label="Treść"
@@ -199,13 +176,6 @@ function Announcements() {
               rows={6}
             />
 
-            <FormField
-              label="Oznacz jako nowe"
-              name="isNew"
-              type="checkbox"
-              value={form.isNew}
-              onChange={handleChange}
-            />
           </div>
 
           <DialogFooter>

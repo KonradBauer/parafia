@@ -13,7 +13,10 @@
       "Bash(ssh root@157.173.96.140 \"node --version && npm --version && npm install -g pm2\")",
       "Bash(ssh:*)",
       "Bash(scp:*)",
-      "Bash(npm run build:frontend:*)"
+      "Bash(npm run build:frontend:*)",
+      "Bash(npx vite build:*)",
+      "Bash(npm install:*)",
+      "Bash(node -e:*)"
     ]
   }
 }
