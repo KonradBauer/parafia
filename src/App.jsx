@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import ScrollToTop from './components/ScrollToTop'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import AnnouncementsPage from './pages/AnnouncementsPage'
@@ -11,7 +12,9 @@ import ContactPage from './pages/ContactPage'
 
 function App() {
   return (
-    <Layout>
+    <>
+      <ScrollToTop />
+      <Layout>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/ogloszenia" element={<AnnouncementsPage />} />
@@ -23,6 +26,7 @@ function App() {
         <Route path="/kontakt" element={<ContactPage />} />
       </Routes>
     </Layout>
+    </>
   )
 }
 

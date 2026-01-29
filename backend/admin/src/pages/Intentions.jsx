@@ -13,12 +13,10 @@ import PageHeader from '@/components/PageHeader'
 import DataTable from '@/components/DataTable'
 import LoadingState from '@/components/LoadingState'
 import DeleteConfirm from '@/components/DeleteConfirm'
-import FormField from '@/components/FormField'
 import RichTextEditor from '@/components/RichTextEditor'
 import { BookOpen, Loader2 } from 'lucide-react'
 
 const initialForm = {
-  title: '',
   content: '',
 }
 
@@ -47,11 +45,6 @@ function Intentions() {
     }
   }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-  }
-
   const openAdd = () => {
     setSelected(null)
     setForm(initialForm)
@@ -61,7 +54,6 @@ function Intentions() {
   const openEdit = (item) => {
     setSelected(item)
     setForm({
-      title: item.title || '',
       content: item.content || '',
     })
     setDialogOpen(true)
@@ -116,16 +108,8 @@ function Intentions() {
 
   const columns = [
     {
-      key: 'title',
-      label: 'Tytuł',
-      render: (value) => (
-        <span className="font-medium">{value || 'Bez tytułu'}</span>
-      ),
-    },
-    {
       key: 'createdAt',
       label: 'Data utworzenia',
-      className: 'w-[150px]',
       render: (value) => formatDate(value),
     },
   ]
@@ -157,14 +141,6 @@ function Intentions() {
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            <FormField
-              label="Tytuł (opcjonalnie)"
-              name="title"
-              value={form.title}
-              onChange={handleChange}
-              placeholder="np. Intencje na tydzień 26.01-02.02"
-            />
-
             <RichTextEditor
               label="Treść"
               value={form.content}
@@ -191,7 +167,7 @@ function Intentions() {
         onConfirm={handleDelete}
         loading={saving}
         title="Usuń intencje"
-        description={`Czy na pewno chcesz usunąć intencje "${selected?.title || 'Bez tytułu'}"?`}
+        description="Czy na pewno chcesz usunąć te intencje?"
       />
     </>
   )
