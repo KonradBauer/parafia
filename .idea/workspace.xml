@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="pa rwd">
-      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
+    <list default="true" id="2e1e1ad1-f984-472a-aaf8-aa0fc53f0a7b" name="Changes" comment="refactor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Announcements.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Announcements.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/backend/admin/src/pages/Intentions.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/validators.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/IntentionsPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +100,7 @@
       <workItem from="1769608155011" duration="2455000" />
       <workItem from="1769674192551" duration="1668000" />
       <workItem from="1769677898259" duration="4498000" />
-      <workItem from="1769693010387" duration="633000" />
+      <workItem from="1769693010387" duration="1087000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -226,7 +214,15 @@
       <option name="project" value="LOCAL" />
       <updated>1769594170022</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="refactor">
+      <option name="closed" value="true" />
+      <created>1769693845954</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1769693845954</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,6 +237,7 @@
     <MESSAGE value="mobile layout" />
     <MESSAGE value="mobile main section padding" />
     <MESSAGE value="pa rwd" />
-    <option name="LAST_COMMIT_MESSAGE" value="pa rwd" />
+    <MESSAGE value="refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor" />
   </component>
 </project>
