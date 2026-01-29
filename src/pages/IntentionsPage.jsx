@@ -30,12 +30,6 @@ function IntentionsPage() {
             </div>
           ) : intention ? (
             <div className="max-w-4xl mx-auto">
-              {intention.title && (
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary-600 dark:text-primary-300 text-center mb-8">
-                  {intention.title}
-                </h2>
-              )}
-
               <div
                 className="intentions-content bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 md:p-8"
                 dangerouslySetInnerHTML={{ __html: intention.content }}

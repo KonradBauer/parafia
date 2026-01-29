@@ -164,7 +164,6 @@ function initDatabase() {
   db.exec(`
     CREATE TABLE IF NOT EXISTS intention_entries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT,
       content TEXT NOT NULL,
       createdAt TEXT DEFAULT (datetime('now')),
       updatedAt TEXT DEFAULT (datetime('now'))

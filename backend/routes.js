@@ -146,18 +146,18 @@ router.get('/intentions/:id', [rules.id], validate, (req, res) => {
 });
 
 router.post('/intentions', verifyToken, schemas.intentionEntry, validate, (req, res) => {
-  const { title, content } = req.body;
+  const { content } = req.body;
   const result = db.prepare(
-    'INSERT INTO intention_entries (title, content) VALUES (?, ?)'
-  ).run(title || null, content);
+    'INSERT INTO intention_entries (content) VALUES (?)'
+  ).run(content);
   res.json({ id: result.lastInsertRowid, ...req.body });
 });
 
 router.put('/intentions/:id', verifyToken, [rules.id, ...schemas.intentionEntry], validate, (req, res) => {
-  const { title, content } = req.body;
+  const { content } = req.body;
   db.prepare(
-    "UPDATE intention_entries SET title = ?, content = ?, updatedAt = datetime('now') WHERE id = ?"
-  ).run(title || null, content, req.params.id);
+    "UPDATE intention_entries SET content = ?, updatedAt = datetime('now') WHERE id = ?"
+  ).run(content, req.params.id);
   res.json({ id: parseInt(req.params.id), ...req.body });
 });
 

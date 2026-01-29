@@ -112,7 +112,6 @@ const schemas = {
 
   // Intention entries (rich text)
   intentionEntry: [
-    rules.optionalString('title', 200),
     rules.requiredString('content', 50000),
   ],
 
